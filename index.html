@@ -257,6 +257,10 @@
         let countdownTargetDateStr;
         let countdownInterval = null;
         const ALL_TASK_IDS = ['task-1-1', 'task-1-2', 'task-1-3', 'task-2-1', 'task-2-2', 'task-3-1', 'task-4-1', 'task-5-1', 'task-5-2', 'task-6-1'];
+        // ========================= INICIO DE LA CORRECCIÓN =========================
+        // Se añade una versión al plan para forzar la actualización si es necesario.
+        const PLAN_VERSION = 2; 
+        // ========================== FIN DE LA CORRECCIÓN ===========================
         
         let calendarView, boardView, viewSwitcher, calendarContainer, todoContainer, inprogressContainer, doneContainer;
         let dayModal, dayModalOverlay, dayModalTitle, dayModalTopicsContainer, dayModalNotes, saveNoteButton;
@@ -323,11 +327,18 @@
             
             const dataUpdated = migrateInitialProgress();
 
+            // ========================= INICIO DE LA CORRECCIÓN =========================
+            const savedPlanVersion = getData('planVersion', 1);
             studyPlan = getData('studyPlan');
-            if (!studyPlan) {
+
+            // Si el plan no existe o su versión es antigua, se regenera y se guarda.
+            if (!studyPlan || savedPlanVersion < PLAN_VERSION) {
                 studyPlan = generateStudyPlan();
                 saveData('studyPlan', studyPlan);
+                saveData('planVersion', PLAN_VERSION);
             }
+            // ========================== FIN DE LA CORRECCIÓN ===========================
+
             countdownTargetDateStr = getData('countdownTarget', '2025-09-23');
             countdownDatePicker.value = countdownTargetDateStr;
 
@@ -402,10 +413,7 @@
         function generateStudyPlan() {
             const topicsBySpecialtyPart1 = {
                 "UROLOGÍA": [ "Escroto agudo", "Torsión testicular", "Hiperplasia prostática benigna", "Cáncer de próstata", "Pielonefritis aguda", "Infección de tracto urinario", "Urolitiasis", "Orquiepididimitis", "Cáncer testicular", "Disfunción eréctil", "Estenosis del meato urinario", "Hidrocele", "Varicocele", "Prostatitis aguda", "Cáncer de vejiga", "Cáncer renal", "Incontinencia urinaria", "Retención aguda de orina" ],
-                // ========================= INICIO DE LA CORRECCIÓN =========================
-                // Se elimina "Enfermedad de Addison" de esta lista para evitar que se programe dos veces.
                 "ENDOCRINOLOGÍA": [ "Diabetes mellitus", "Prediabetes", "Diabetes en el adulto mayor", "Diabetes en pediatría", "Cetoacidosis diabética y EHH", "Hipoglucemia", "Enfermedad de Cushing / Síndrome de Cushing", "Hiperprolactinemia", "Acromegalia", "Feocromocitoma", "Hiperaldosteronismo", "Hiperparatiroidismo", "Neoplasia endocrina múltple", "Alopecia endocrina" ],
-                // ========================== FIN DE LA CORRECCIÓN ===========================
                 "INFECTOLOGÍA": [ "Brucelosis", "Cisticercosis", "Clostridium", "Diarrea aguda en adultos", "Diarrea en niños", "Chinkungunya", "Dengue", "Zika", "Paludismo", "Salmonella Fiebre tifoidea", "Sepsis y choque séptico", "Tuberculosis pulmonar", "ETS Generalidades", "VIH Adultos", "VIH Madre e hijo", "RV yOportunistas", "Sarcoma de Kaposi", "Giardiasis", "Tuberculosis extrapulmonar", "Lepra", "Medios de cultivo", "Actinomicosis", "Amebiasis intestinal", "Anquilostomiasis", "Ascariasis", "Aspergilosis", "Coccidioidomicosis", "Difteria", "Enfermedad de Chagas", "Enfermedad de Lyme", "Estrongiloidiasis", "Fascitis necrosante", "Fiebre de origen desconocido", "Filariasis linfática", "Filariasis ocular Loasis", "Infecciones odontogénicas", "Leishmaniasis", "Leptospirosis", "Mucormicosis", "Oncocercosis", "Oxiuriasis o enterobiasis", "Poliomielitis", "Rabia", "Tricuriasis", "Triquinosis", "Neumonía adquirida en la comunidad", "Neumonía bacteriana adquirida en la comunidad Niños", "Influenza", "Meningitis", "Encefalitis viral", "Absceso cerebral" ],
                 "HEMATOLOGÍA": [ "Anemia generalidades", "Anemia ferropénica Adultos", "Leucemias", "Linfomas", "Trombocitopenia inmune" ],
                 "NEUROLOGÍA": [ "Cefalea Secundarias", "Cefaleas primarias", "Crisis convulsivas", "Estatus epiléptico", "Crisis febriles", "Enfermedad de Parkinson", "Evc isquémico", "Hemorragia subaracnoidea", "Guillain Barré", "Esclerosis múltiple", "Evc hemorrágico", "Miastenia gravis", "Muerte encefálica" ],
@@ -424,7 +432,6 @@
             let currentDatePart1 = new Date('2025-06-30');
             while (allTopicsToSchedulePart1.length > 0) {
                 currentDatePart1.setDate(currentDatePart1.getDate() - 1);
-                // Evitamos generar temas para el día 25, que ya está definido manualmente.
                 if (currentDatePart1.toISOString().split('T')[0] === '2025-06-25') continue;
 
                 const chunkSize = Math.min(allTopicsToSchedulePart1.length, Math.floor(Math.random() * (8 - 4 + 1)) + 4);
@@ -435,8 +442,6 @@
                 plannedDaysPart1.push(dayData);
             }
             
-            // ========================= INICIO DE LA CORRECCIÓN =========================
-            // Se define el bloque manual del 25 de Junio para Endocrinología.
             const endoDay = {
                 date: "2025-06-25",
                 blocks: [{
@@ -448,7 +453,6 @@
                     ]
                 }]
             };
-            // ========================== FIN DE LA CORRECCIÓN ===========================
 
             const oftalmoDays = [
                 { date: "2025-06-30", blocks: [ { subject: "OFTALMOLOGÍA", topics: ["Blefaritis", "Orzuelo", "Conjuntivitis (alergica, bacteriana, neonatal, viral)", "Chalazión", "Glaucoma de ángulo abierto", "Glaucoma de ángulo cerrado", "Glaucoma congénito"] } ] },
@@ -507,7 +511,7 @@
                 { date: "2025-08-21", blocks: [ { subject: "OBSTETRICIA", topics: ["Preeclampsia sin datos de severidad", "Síndrome de HELLP", "Diabetes gestacional", "IVU en el embarazo", "Restricción del crecimiento intrauterino", "Sepsis puerperal"] } ] },
                 { date: "2025-08-22", blocks: [ { subject: "OBSTETRICIA", topics: ["Síndrome de Sheehan", "Depresión posparto"] }, { subject: "HEMORRAGIAS OBSTÉTRICAS", topics: ["Generalidades de hemorragias", "Hemorragia postparto", "Desgarro perineal", "Amenaza de aborto"] } ] },
                 { date: "2025-08-23", blocks: [ { subject: "HEMORRAGIAS OBSTÉTRICAS", topics: ["Aborto espontáneo", "Acretismo placentario", "Atonía uterina", "Choque hemorrágico en obstetricia", "Desprendimiento prematuro de placenta normoinserta", "Embarazo ectópico"] } ] },
-                { date: "2025-08-24", blocks: [ { subject: "HEMORRAGIAS OBSTÉTRICAS", topics: ["Placenta previa", "Ruptura uterina", "Vasa previa", "Enfermedad trofoblástica gestacional"] }, { subject: "NEONATOLOGÍA", topics: ["APGAR", "Reanimación neonatal"] } ] },
+                { date: "2025-08-24", blocks: [ { subject: "HEMORRAGias OBSTÉTRICAS", topics: ["Placenta previa", "Ruptura uterina", "Vasa previa", "Enfermedad trofoblástica gestacional"] }, { subject: "NEONATOLOGÍA", topics: ["APGAR", "Reanimación neonatal"] } ] },
                 { date: "2025-08-25", blocks: [ { subject: "NEONATOLOGÍA", topics: ["Prematuro sano", "Recién nacido de término", "Apnea del prematuro", "Asfixia neonatal", "Síndrome de dificultad respiratoria", "Taquipnea transitoria del recién nacido"] } ] },
                 { date: "2025-08-26", blocks: [ { subject: "NEONATOLOGÍA", topics: ["Síndrome de aspiración de meconio", "Displasia broncopulmonar", "Silverman Anderson", "Maduración pulmonar", "Encefalopatía hipóxica", "Enfermedad hemorrágica del recién nacido"] } ] },
                 { date: "2025-08-27", blocks: [ { subject: "NEONATOLOGÍA", topics: ["Enterocolitis necrotizante", "Hipoacusia neonatal", "Hipoglucemia neonatal", "Ictericia neonatal", "Muerte súbita del lactante", "Sepsis neonatal"] } ] },
@@ -527,10 +531,7 @@
                 { date: "2025-09-10", blocks: [ { subject: "VACUNAS", topics: ["VPH"] } ] },
             ];
             
-            // ========================= INICIO DE LA CORRECCIÓN =========================
-            // Se combinan todos los bloques de días (automáticos, manuales y fijos)
             let finalPlannedDays = [...plannedDaysPart1.reverse(), endoDay, ...oftalmoDays, ...orlDays, ...newStudyBlock];
-            // ========================== FIN DE LA CORRECCIÓN ===========================
             
             let lastPlannedDate = new Date(finalPlannedDays[finalPlannedDays.length - 1].date);
             let finalCalendarDate = new Date('2025-09-30');
