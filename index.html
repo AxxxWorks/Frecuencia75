@@ -321,10 +321,7 @@
                 userProgress = {};
             }
             
-            // ========================= INICIO DE LA CORRECCIÓN =========================
-            // Esta función ahora actualiza el progreso si es necesario.
             const dataUpdated = migrateInitialProgress();
-            // ========================== FIN DE LA CORRECCIÓN ===========================
 
             studyPlan = getData('studyPlan');
             if (!studyPlan) {
@@ -334,7 +331,6 @@
             countdownTargetDateStr = getData('countdownTarget', '2025-09-23');
             countdownDatePicker.value = countdownTargetDateStr;
 
-            // Si los datos se actualizaron, se fuerzará un guardado en la nube.
             if (dataUpdated) {
                  db.collection('userProgress').doc(currentUser.uid).set({ progressData: userProgress }, { merge: true })
                   .catch(error => console.error("Error al sincronizar datos migrados:", error));
@@ -349,7 +345,6 @@
         function generateTopicId(topicName) { return `topic_${topicName.toLowerCase().replace(/[^a-z0-9]/g, '')}`; }
         function getScoreColor(percentage) { if (percentage >= 80) return 'var(--vfd-green)'; if (percentage >= 60) return 'var(--warning-color)'; return 'var(--error-color)'; }
         
-        // ========================= INICIO DE LA CORRECCIÓN =========================
         function migrateInitialProgress() {
             const initialData = {
                 "ORL": { "Epistaxis": {aciertos: 8, reactivos: 9}, "VPPB": {aciertos: 9, reactivos: 9}, "Parálisis de Bell": {aciertos: 6, reactivos: 9}, "Neuralgia de trigémino": {aciertos: 1, reactivos: 14}, "Neuritis vestibular": {aciertos: 6, reactivos: 9}, "Fracturas nasales": {aciertos: 8, reactivos: 9}, "Rinosinusitis": {aciertos: 6, reactivos: 9}, "Faringoamigdalitis": {aciertos: 6, reactivos: 9}, "Angina de Ludwig": {aciertos: 6, reactivos: 9}, "Otitis": {aciertos: 7, reactivos: 9}, "Mastoiditis aguda": {aciertos: 5, reactivos: 9} },
@@ -376,7 +371,6 @@
             for (const specialty in initialData) {
                 for (const topic in initialData[specialty]) {
                     const topicId = generateTopicId(topic);
-                    // Solo añade el tema si NO existe en el progreso del usuario
                     if (!userProgress.topicData[topicId]) {
                         dataWasUpdated = true;
                         const data = initialData[specialty][topic];
@@ -384,7 +378,6 @@
                             scoreAciertos: data.aciertos,
                             scoreReactivos: data.reactivos,
                         };
-                        // Si el tema tiene puntaje, se considera completado
                         if (data.aciertos > 0 || data.reactivos > 0) {
                             ALL_TASK_IDS.forEach(taskId => {
                                 userProgress.topicData[topicId][taskId] = true;
@@ -395,10 +388,8 @@
             }
             return dataWasUpdated;
         }
-        // ========================== FIN DE LA CORRECCIÓN ===========================
-
+        
         function generateStudyPlan() {
-            // FASE 1: Temas originales (Genética a Urología)
             const topicsBySpecialtyPart1 = {
                 "UROLOGÍA": [ "Escroto agudo", "Torsión testicular", "Hiperplasia prostática benigna", "Cáncer de próstata", "Pielonefritis aguda", "Infección de tracto urinario", "Urolitiasis", "Orquiepididimitis", "Cáncer testicular", "Disfunción eréctil", "Estenosis del meato urinario", "Hidrocele", "Varicocele", "Prostatitis aguda", "Cáncer de vejiga", "Cáncer renal", "Incontinencia urinaria", "Retención aguda de orina" ],
                 "ENDOCRINOLOGÍA": [ "Diabetes mellitus", "Prediabetes", "Diabetes en el adulto mayor", "Diabetes en pediatría", "Cetoacidosis diabética y EHH", "Hipoglucemia", "Enfermedad de Addison", "Enfermedad de Cushing / Síndrome de Cushing", "Hiperprolactinemia", "Acromegalia", "Feocromocitoma", "Hiperaldosteronismo", "Hiperparatiroidismo", "Neoplasia endocrina múltple", "Alopecia endocrina" ],
@@ -553,6 +544,11 @@
             ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].forEach(day => calendarContainer.innerHTML += `<div class="header-cell day-header">${day}</div>`);
             monthLayout.forEach((layout, name) => { calendarContainer.innerHTML += `<div class="month-cell" style="grid-row: ${layout.startRow} / span ${layout.rowSpan}">${name}</div>`; });
             
+            // ========================= INICIO DE LA CORRECCIÓN =========================
+            // Se declara el Set fuera de los bucles para que sea persistente.
+            const globallyDisplayedSubjects = new Set();
+            // ========================== FIN DE LA CORRECCIÓN ===========================
+
             weeks.forEach((week, weekIndex) => {
                 calendarContainer.innerHTML += `<div class="week-cell-container" style="grid-row: ${weekIndex + 2}"><span class="week-number">${weekIndex + 1}</span></div>`;
                 
@@ -568,16 +564,18 @@
                         const dayData = daysMap.get(dateString);
                         if (dayData && dayData.blocks && dayData.blocks.length > 0 && dayData.blocks.some(b => b.topics && b.topics.length > 0)) {
                             let contentHTML = '<ul>';
-                            let displayedSubjects = new Set();
                             dayData.blocks.forEach(block => {
-                                if (block.subject && !displayedSubjects.has(block.subject)) {
+                                // ========================= INICIO DE LA CORRECCIÓN =========================
+                                // Se comprueba contra el Set global. Si la materia no se ha mostrado, se muestra y se añade al Set.
+                                if (block.subject && !globallyDisplayedSubjects.has(block.subject)) {
                                     const isComplete = isSubjectComplete(block.subject);
                                     const completedClass = isComplete ? ' subject-completed' : '';
                                     const score = calculateSubjectScore(block.subject);
                                     const scoreText = score !== null ? `<span class="subject-score">(${score}%)</span>` : '';
                                     contentHTML += `<li><span class="subject-title${completedClass}">${block.subject}${scoreText}</span></li>`;
-                                    displayedSubjects.add(block.subject);
+                                    globallyDisplayedSubjects.add(block.subject);
                                 }
+                                // ========================== FIN DE LA CORRECCIÓN ===========================
                                 if (block.topics) {
                                     contentHTML += block.topics.map(topic => createTopicListItem(topic)).join('');
                                 }
