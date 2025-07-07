@@ -347,6 +347,17 @@
         
         function migrateInitialProgress() {
             const initialData = {
+                "ENDOCRINOLOGÍA": {
+                    "Nódulo tiroideo": {aciertos: 5, reactivos: 9},
+                    "Ca tiroides": {aciertos: 5, reactivos: 9},
+                    "Hipotiroidismo": {aciertos: 86, reactivos: 100},
+                    "Hipertiroidismo": {aciertos: 58, reactivos: 100},
+                    "Dislipidemias": {aciertos: 4, reactivos: 9},
+                    "Obesidad": {aciertos: 6, reactivos: 9},
+                    "E. Addison": {aciertos: 6, reactivos: 9},
+                    "Sx Metabólico": {aciertos: 8, reactivos: 9},
+                    "Diabetes mellitus": {aciertos:12,reactivos:15}, "Prediabetes": {aciertos:15,reactivos:15}, "Diabetes en el adulto mayor": {aciertos:6,reactivos:9}, "Diabetes en pediatría": {aciertos:5,reactivos:9}, "Cetoacidosis diabética y EHH": {aciertos:13,reactivos:18}, "Hipoglucemia": {aciertos:6,reactivos:9}, "Enfermedad de Cushing / Síndrome de Cushing": {aciertos:0,reactivos:0}, "Hiperprolactinemia": {aciertos:0,reactivos:0}, "Acromegalia": {aciertos:0,reactivos:0}, "Feocromocitoma": {aciertos:0,reactivos:0}, "Hiperaldosteronismo": {aciertos:0,reactivos:0}, "Hiperparatiroidismo": {aciertos:0,reactivos:0}, "Neoplasia endocrina múltple": {aciertos:0,reactivos:0}, "Alopecia endocrina": {aciertos:0,reactivos:0} 
+                },
                 "ORL": { "Epistaxis": {aciertos: 8, reactivos: 9}, "VPPB": {aciertos: 9, reactivos: 9}, "Parálisis de Bell": {aciertos: 6, reactivos: 9}, "Neuralgia de trigémino": {aciertos: 1, reactivos: 14}, "Neuritis vestibular": {aciertos: 6, reactivos: 9}, "Fracturas nasales": {aciertos: 8, reactivos: 9}, "Rinosinusitis": {aciertos: 6, reactivos: 9}, "Faringoamigdalitis": {aciertos: 6, reactivos: 9}, "Angina de Ludwig": {aciertos: 6, reactivos: 9}, "Otitis": {aciertos: 7, reactivos: 9}, "Mastoiditis aguda": {aciertos: 5, reactivos: 9} },
                 "OFTALMOLOGÍA": { "Blefaritis": { aciertos: 5, reactivos: 9 }, "Orzuelo": { aciertos: 6, reactivos: 9 }, "Conjuntivitis (alergica, bacteriana, neonatal, viral)": { aciertos: 16, reactivos: 21 }, "Chalazión": { aciertos: 9, reactivos: 9 }, "Glaucoma de ángulo abierto": { aciertos: 3, reactivos: 9 }, "Glaucoma de ángulo cerrado": { aciertos: 5, reactivos: 9 }, "Glaucoma congénito": { aciertos: 8, reactivos: 9 }, "Degeneración macular": { aciertos: 0, reactivos: 0 }, "Desprendimiento de retina": { aciertos: 0, reactivos: 0 }, "Retinopatía diabética": { aciertos: 4, reactivos: 9 }, "Retinopatía hipertensiva": { aciertos: 5, reactivos: 9 }, "Catarata": { aciertos: 7, reactivos: 9 }, "Trauma ocular": { aciertos: 15, reactivos: 18 }, "Ojo rojo": { aciertos: 7, reactivos: 9 } },
                 "GENÉTICA": { "Síndrome de Down": {aciertos:0,reactivos:0}, "Síndrome de Klinefelter": {aciertos:0,reactivos:0}, "Síndrome de Turner": {aciertos:0,reactivos:0}, "Síndrome de Marfan": {aciertos:0,reactivos:0}, "Enfermedad de Wilson": {aciertos:0,reactivos:0}, "Síndrome de Dravet": {aciertos:0,reactivos:0}, "Síndrome de Lynch": {aciertos:0,reactivos:0}, "Síndrome de Peutz Jegher": {aciertos:0,reactivos:0}, "Von Hippel Lindau": {aciertos:0,reactivos:0} },
@@ -359,7 +370,6 @@
                 "NEUROLOGÍA": { "Cefalea Secundarias": {aciertos:12,reactivos:12}, "Cefaleas primarias": {aciertos:9,reactivos:12}, "Crisis convulsivas": {aciertos:4,reactivos:12}, "Estatus epiléptico": {aciertos:9,reactivos:12}, "Crisis febriles": {aciertos:5,reactivos:12}, "Enfermedad de Parkinson": {aciertos:6,reactivos:9}, "Evc isquémico": {aciertos:10,reactivos:12}, "Hemorragia subaracnoidea": {aciertos:9,reactivos:9}, "Guillain Barré": {aciertos:8,reactivos:9}, "Esclerosis múltiple": {aciertos:5,reactivos:12}, "Evc hemorrágico": {aciertos:6,reactivos:12}, "Miastenia gravis": {aciertos:5,reactivos:9}, "Muerte encefálica": {aciertos:6,reactivos:9} },
                 "HEMATOLOGÍA": { "Anemia generalidades": {aciertos:8,reactivos:18}, "Anemia ferropénica Adultos": {aciertos:8,reactivos:12}, "Leucemias": {aciertos:8,reactivos:12}, "Linfomas": {aciertos:10,reactivos:15}, "Trombocitopenia inmune": {aciertos:5,reactivos:9} },
                 "INFECTOLOGÍA": { "Brucelosis": {aciertos:3,reactivos:3}, "Cisticercosis": {aciertos:7,reactivos:9}, "Clostridium": {aciertos:8,reactivos:9}, "Diarrea aguda en adultos": {aciertos:9,reactivos:12}, "Diarrea en niños": {aciertos:10,reactivos:12}, "Chinkungunya": {aciertos:7,reactivos:9}, "Dengue": {aciertos:6,reactivos:9}, "Zika": {aciertos:8,reactivos:9}, "Paludismo": {aciertos:7,reactivos:9}, "Salmonella Fiebre tifoidea": {aciertos:7,reactivos:9}, "Sepsis y choque séptico": {aciertos:7,reactivos:9}, "Tuberculosis pulmonar": {aciertos:14,reactivos:21}, "ETS Generalidades": {aciertos:14,reactivos:18}, "VIH Adultos": {aciertos:16,reactivos:21}, "VIH Madre e hijo": {aciertos:17,reactivos:21}, "RV yOportunistas": {aciertos:14,reactivos:21}, "Sarcoma de Kaposi": {aciertos:6,reactivos:9}, "Giardiasis": {aciertos:8,reactivos:9}, "Tuberculosis extrapulmonar": {aciertos:10,reactivos:12}, "Lepra": {aciertos:5,reactivos:9}, "Medios de cultivo": {aciertos:5,reactivos:9}, "Actinomicosis": {aciertos:6,reactivos:9}, "Amebiasis intestinal": {aciertos:7,reactivos:9}, "Anquilostomiasis": {aciertos:9,reactivos:9}, "Ascariasis": {aciertos:9,reactivos:9}, "Aspergilosis": {aciertos:7,reactivos:9}, "Coccidioidomicosis": {aciertos:8,reactivos:9}, "Difteria": {aciertos:9,reactivos:9}, "Enfermedad de Chagas": {aciertos:7,reactivos:9}, "Enfermedad de Lyme": {aciertos:7,reactivos:9}, "Estrongiloidiasis": {aciertos:7,reactivos:9}, "Fascitis necrosante": {aciertos:7,reactivos:9}, "Fiebre de origen desconocido": {aciertos:5,reactivos:9}, "Filariasis linfática": {aciertos:4,reactivos:9}, "Filariasis ocular Loasis": {aciertos:7,reactivos:9}, "Infecciones odontogénicas": {aciertos:6,reactivos:9}, "Leishmaniasis": {aciertos:7,reactivos:9}, "Leptospirosis": {aciertos:8,reactivos:9}, "Mucormicosis": {aciertos:9,reactivos:9}, "Oncocercosis": {aciertos:7,reactivos:9}, "Oxiuriasis o enterobiasis": {aciertos:5,reactivos:9}, "Poliomielitis": {aciertos:8,reactivos:9}, "Rabia": {aciertos:7,reactivos:9}, "Tricuriasis": {aciertos:9,reactivos:9}, "Triquinosis": {aciertos:8,reactivos:9}, "Neumonía adquirida en la comunidad": {aciertos:3,reactivos:12}, "Neumonía bacteriana adquirida en la comunidad Niños": {aciertos:7,reactivos:12}, "Influenza": {aciertos:6,reactivos:9}, "Meningitis": {aciertos:10,reactivos:12}, "Encefalitis viral": {aciertos:8,reactivos:9}, "Absceso cerebral": {aciertos:8,reactivos:9} },
-                "ENDOCRINOLOGÍA": { "Diabetes mellitus": {aciertos:12,reactivos:15}, "Prediabetes": {aciertos:15,reactivos:15}, "Diabetes en el adulto mayor": {aciertos:6,reactivos:9}, "Diabetes en pediatría": {aciertos:5,reactivos:9}, "Cetoacidosis diabética y EHH": {aciertos:13,reactivos:18}, "Hipoglucemia": {aciertos:6,reactivos:9}, "Enfermedad de Addison": {aciertos:0,reactivos:0}, "Enfermedad de Cushing / Síndrome de Cushing": {aciertos:0,reactivos:0}, "Hiperprolactinemia": {aciertos:0,reactivos:0}, "Acromegalia": {aciertos:0,reactivos:0}, "Feocromocitoma": {aciertos:0,reactivos:0}, "Hiperaldosteronismo": {aciertos:0,reactivos:0}, "Hiperparatiroidismo": {aciertos:0,reactivos:0}, "Neoplasia endocrina múltple": {aciertos:0,reactivos:0}, "Alopecia endocrina": {aciertos:0,reactivos:0} },
                 "UROLOGÍA": { "Escroto agudo": {aciertos:0,reactivos:0}, "Torsión testicular": {aciertos:0,reactivos:0}, "Hiperplasia prostática benigna": {aciertos:0,reactivos:0}, "Cáncer de próstata": {aciertos:0,reactivos:0}, "Pielonefritis aguda": {aciertos:0,reactivos:0}, "Infección de tracto urinario": {aciertos:0,reactivos:0}, "Urolitiasis": {aciertos:0,reactivos:0}, "Orquiepididimitis": {aciertos:0,reactivos:0}, "Cáncer testicular": {aciertos:0,reactivos:0}, "Disfunción eréctil": {aciertos:0,reactivos:0}, "Estenosis del meato urinario": {aciertos:0,reactivos:0}, "Hidrocele": {aciertos:0,reactivos:0}, "Varicocele": {aciertos:0,reactivos:0}, "Prostatitis aguda": {aciertos:0,reactivos:0}, "Cáncer de vejiga": {aciertos:0,reactivos:0}, "Cáncer renal": {aciertos:0,reactivos:0}, "Incontinencia urinaria": {aciertos:0,reactivos:0}, "Retención aguda de orina": {aciertos:0,reactivos:0} }
             };
 
@@ -392,7 +402,10 @@
         function generateStudyPlan() {
             const topicsBySpecialtyPart1 = {
                 "UROLOGÍA": [ "Escroto agudo", "Torsión testicular", "Hiperplasia prostática benigna", "Cáncer de próstata", "Pielonefritis aguda", "Infección de tracto urinario", "Urolitiasis", "Orquiepididimitis", "Cáncer testicular", "Disfunción eréctil", "Estenosis del meato urinario", "Hidrocele", "Varicocele", "Prostatitis aguda", "Cáncer de vejiga", "Cáncer renal", "Incontinencia urinaria", "Retención aguda de orina" ],
-                "ENDOCRINOLOGÍA": [ "Diabetes mellitus", "Prediabetes", "Diabetes en el adulto mayor", "Diabetes en pediatría", "Cetoacidosis diabética y EHH", "Hipoglucemia", "Enfermedad de Addison", "Enfermedad de Cushing / Síndrome de Cushing", "Hiperprolactinemia", "Acromegalia", "Feocromocitoma", "Hiperaldosteronismo", "Hiperparatiroidismo", "Neoplasia endocrina múltple", "Alopecia endocrina" ],
+                // ========================= INICIO DE LA CORRECCIÓN =========================
+                // Se elimina "Enfermedad de Addison" de esta lista para evitar que se programe dos veces.
+                "ENDOCRINOLOGÍA": [ "Diabetes mellitus", "Prediabetes", "Diabetes en el adulto mayor", "Diabetes en pediatría", "Cetoacidosis diabética y EHH", "Hipoglucemia", "Enfermedad de Cushing / Síndrome de Cushing", "Hiperprolactinemia", "Acromegalia", "Feocromocitoma", "Hiperaldosteronismo", "Hiperparatiroidismo", "Neoplasia endocrina múltple", "Alopecia endocrina" ],
+                // ========================== FIN DE LA CORRECCIÓN ===========================
                 "INFECTOLOGÍA": [ "Brucelosis", "Cisticercosis", "Clostridium", "Diarrea aguda en adultos", "Diarrea en niños", "Chinkungunya", "Dengue", "Zika", "Paludismo", "Salmonella Fiebre tifoidea", "Sepsis y choque séptico", "Tuberculosis pulmonar", "ETS Generalidades", "VIH Adultos", "VIH Madre e hijo", "RV yOportunistas", "Sarcoma de Kaposi", "Giardiasis", "Tuberculosis extrapulmonar", "Lepra", "Medios de cultivo", "Actinomicosis", "Amebiasis intestinal", "Anquilostomiasis", "Ascariasis", "Aspergilosis", "Coccidioidomicosis", "Difteria", "Enfermedad de Chagas", "Enfermedad de Lyme", "Estrongiloidiasis", "Fascitis necrosante", "Fiebre de origen desconocido", "Filariasis linfática", "Filariasis ocular Loasis", "Infecciones odontogénicas", "Leishmaniasis", "Leptospirosis", "Mucormicosis", "Oncocercosis", "Oxiuriasis o enterobiasis", "Poliomielitis", "Rabia", "Tricuriasis", "Triquinosis", "Neumonía adquirida en la comunidad", "Neumonía bacteriana adquirida en la comunidad Niños", "Influenza", "Meningitis", "Encefalitis viral", "Absceso cerebral" ],
                 "HEMATOLOGÍA": [ "Anemia generalidades", "Anemia ferropénica Adultos", "Leucemias", "Linfomas", "Trombocitopenia inmune" ],
                 "NEUROLOGÍA": [ "Cefalea Secundarias", "Cefaleas primarias", "Crisis convulsivas", "Estatus epiléptico", "Crisis febriles", "Enfermedad de Parkinson", "Evc isquémico", "Hemorragia subaracnoidea", "Guillain Barré", "Esclerosis múltiple", "Evc hemorrágico", "Miastenia gravis", "Muerte encefálica" ],
@@ -411,6 +424,9 @@
             let currentDatePart1 = new Date('2025-06-30');
             while (allTopicsToSchedulePart1.length > 0) {
                 currentDatePart1.setDate(currentDatePart1.getDate() - 1);
+                // Evitamos generar temas para el día 25, que ya está definido manualmente.
+                if (currentDatePart1.toISOString().split('T')[0] === '2025-06-25') continue;
+
                 const chunkSize = Math.min(allTopicsToSchedulePart1.length, Math.floor(Math.random() * (8 - 4 + 1)) + 4);
                 const chunk = allTopicsToSchedulePart1.splice(0, chunkSize);
                 const dayData = { date: currentDatePart1.toISOString().split('T')[0], blocks: [] };
@@ -419,6 +435,21 @@
                 plannedDaysPart1.push(dayData);
             }
             
+            // ========================= INICIO DE LA CORRECCIÓN =========================
+            // Se define el bloque manual del 25 de Junio para Endocrinología.
+            const endoDay = {
+                date: "2025-06-25",
+                blocks: [{
+                    subject: "ENDOCRINOLOGÍA",
+                    topics: [
+                        "Nódulo tiroideo", "Ca tiroides", "Hipotiroidismo", 
+                        "Hipertiroidismo", "Dislipidemias", "Obesidad", 
+                        "E. Addison", "Sx Metabólico"
+                    ]
+                }]
+            };
+            // ========================== FIN DE LA CORRECCIÓN ===========================
+
             const oftalmoDays = [
                 { date: "2025-06-30", blocks: [ { subject: "OFTALMOLOGÍA", topics: ["Blefaritis", "Orzuelo", "Conjuntivitis (alergica, bacteriana, neonatal, viral)", "Chalazión", "Glaucoma de ángulo abierto", "Glaucoma de ángulo cerrado", "Glaucoma congénito"] } ] },
                 { date: "2025-07-01", blocks: [ { subject: "OFTALMOLOGÍA", topics: ["Degeneración macular", "Desprendimiento de retina", "Retinopatía diabética", "Retinopatía hipertensiva", "Catarata", "Trauma ocular", "Ojo rojo"] } ] }
@@ -496,7 +527,10 @@
                 { date: "2025-09-10", blocks: [ { subject: "VACUNAS", topics: ["VPH"] } ] },
             ];
             
-            let finalPlannedDays = [...plannedDaysPart1.reverse(), ...oftalmoDays, ...orlDays, ...newStudyBlock];
+            // ========================= INICIO DE LA CORRECCIÓN =========================
+            // Se combinan todos los bloques de días (automáticos, manuales y fijos)
+            let finalPlannedDays = [...plannedDaysPart1.reverse(), endoDay, ...oftalmoDays, ...orlDays, ...newStudyBlock];
+            // ========================== FIN DE LA CORRECCIÓN ===========================
             
             let lastPlannedDate = new Date(finalPlannedDays[finalPlannedDays.length - 1].date);
             let finalCalendarDate = new Date('2025-09-30');
@@ -544,10 +578,7 @@
             ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].forEach(day => calendarContainer.innerHTML += `<div class="header-cell day-header">${day}</div>`);
             monthLayout.forEach((layout, name) => { calendarContainer.innerHTML += `<div class="month-cell" style="grid-row: ${layout.startRow} / span ${layout.rowSpan}">${name}</div>`; });
             
-            // ========================= INICIO DE LA CORRECCIÓN =========================
-            // Se declara el Set fuera de los bucles para que sea persistente.
             const globallyDisplayedSubjects = new Set();
-            // ========================== FIN DE LA CORRECCIÓN ===========================
 
             weeks.forEach((week, weekIndex) => {
                 calendarContainer.innerHTML += `<div class="week-cell-container" style="grid-row: ${weekIndex + 2}"><span class="week-number">${weekIndex + 1}</span></div>`;
@@ -565,8 +596,6 @@
                         if (dayData && dayData.blocks && dayData.blocks.length > 0 && dayData.blocks.some(b => b.topics && b.topics.length > 0)) {
                             let contentHTML = '<ul>';
                             dayData.blocks.forEach(block => {
-                                // ========================= INICIO DE LA CORRECCIÓN =========================
-                                // Se comprueba contra el Set global. Si la materia no se ha mostrado, se muestra y se añade al Set.
                                 if (block.subject && !globallyDisplayedSubjects.has(block.subject)) {
                                     const isComplete = isSubjectComplete(block.subject);
                                     const completedClass = isComplete ? ' subject-completed' : '';
@@ -575,7 +604,6 @@
                                     contentHTML += `<li><span class="subject-title${completedClass}">${block.subject}${scoreText}</span></li>`;
                                     globallyDisplayedSubjects.add(block.subject);
                                 }
-                                // ========================== FIN DE LA CORRECCIÓN ===========================
                                 if (block.topics) {
                                     contentHTML += block.topics.map(topic => createTopicListItem(topic)).join('');
                                 }
