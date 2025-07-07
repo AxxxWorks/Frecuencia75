@@ -235,14 +235,11 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // ==================================================================
-        // PASO 2.4 - PEGA AQUÍ LAS CREDENCIALES DE TU PROYECTO FIREBASE
-        // ==================================================================
         const firebaseConfig = {
           apiKey: "AIzaSyCCiJerwL3i9JcCcBz6c1JWqHSBUL7ReCU",
           authDomain: "plan75-d8119.firebaseapp.com",
           projectId: "plan75-d8119",
-          storageBucket: "plan75-d8119.firebasestorage.app",
+          storageBucket: "plan75-d8119.appspot.com",
           messagingSenderId: "87701025627",
           appId: "1:87701025627:web:58d4cd9778a90a4c14e07e"
         };
@@ -322,8 +319,13 @@
                 userProgress = doc.data().progressData;
             } else {
                 userProgress = {};
-                seedInitialProgress();
             }
+            
+            // ========================= INICIO DE LA CORRECCIÓN =========================
+            // Esta función ahora actualiza el progreso si es necesario.
+            const dataUpdated = migrateInitialProgress();
+            // ========================== FIN DE LA CORRECCIÓN ===========================
+
             studyPlan = getData('studyPlan');
             if (!studyPlan) {
                 studyPlan = generateStudyPlan();
@@ -331,6 +333,13 @@
             }
             countdownTargetDateStr = getData('countdownTarget', '2025-09-23');
             countdownDatePicker.value = countdownTargetDateStr;
+
+            // Si los datos se actualizaron, se fuerzará un guardado en la nube.
+            if (dataUpdated) {
+                 db.collection('userProgress').doc(currentUser.uid).set({ progressData: userProgress }, { merge: true })
+                  .catch(error => console.error("Error al sincronizar datos migrados:", error));
+            }
+
             startCountdown();
             populateCalendar();
             updateGlobalProgressBars();
@@ -340,7 +349,8 @@
         function generateTopicId(topicName) { return `topic_${topicName.toLowerCase().replace(/[^a-z0-9]/g, '')}`; }
         function getScoreColor(percentage) { if (percentage >= 80) return 'var(--vfd-green)'; if (percentage >= 60) return 'var(--warning-color)'; return 'var(--error-color)'; }
         
-        function seedInitialProgress() {
+        // ========================= INICIO DE LA CORRECCIÓN =========================
+        function migrateInitialProgress() {
             const initialData = {
                 "ORL": { "Epistaxis": {aciertos: 8, reactivos: 9}, "VPPB": {aciertos: 9, reactivos: 9}, "Parálisis de Bell": {aciertos: 6, reactivos: 9}, "Neuralgia de trigémino": {aciertos: 1, reactivos: 14}, "Neuritis vestibular": {aciertos: 6, reactivos: 9}, "Fracturas nasales": {aciertos: 8, reactivos: 9}, "Rinosinusitis": {aciertos: 6, reactivos: 9}, "Faringoamigdalitis": {aciertos: 6, reactivos: 9}, "Angina de Ludwig": {aciertos: 6, reactivos: 9}, "Otitis": {aciertos: 7, reactivos: 9}, "Mastoiditis aguda": {aciertos: 5, reactivos: 9} },
                 "OFTALMOLOGÍA": { "Blefaritis": { aciertos: 5, reactivos: 9 }, "Orzuelo": { aciertos: 6, reactivos: 9 }, "Conjuntivitis (alergica, bacteriana, neonatal, viral)": { aciertos: 16, reactivos: 21 }, "Chalazión": { aciertos: 9, reactivos: 9 }, "Glaucoma de ángulo abierto": { aciertos: 3, reactivos: 9 }, "Glaucoma de ángulo cerrado": { aciertos: 5, reactivos: 9 }, "Glaucoma congénito": { aciertos: 8, reactivos: 9 }, "Degeneración macular": { aciertos: 0, reactivos: 0 }, "Desprendimiento de retina": { aciertos: 0, reactivos: 0 }, "Retinopatía diabética": { aciertos: 4, reactivos: 9 }, "Retinopatía hipertensiva": { aciertos: 5, reactivos: 9 }, "Catarata": { aciertos: 7, reactivos: 9 }, "Trauma ocular": { aciertos: 15, reactivos: 18 }, "Ojo rojo": { aciertos: 7, reactivos: 9 } },
@@ -357,25 +367,25 @@
                 "ENDOCRINOLOGÍA": { "Diabetes mellitus": {aciertos:12,reactivos:15}, "Prediabetes": {aciertos:15,reactivos:15}, "Diabetes en el adulto mayor": {aciertos:6,reactivos:9}, "Diabetes en pediatría": {aciertos:5,reactivos:9}, "Cetoacidosis diabética y EHH": {aciertos:13,reactivos:18}, "Hipoglucemia": {aciertos:6,reactivos:9}, "Enfermedad de Addison": {aciertos:0,reactivos:0}, "Enfermedad de Cushing / Síndrome de Cushing": {aciertos:0,reactivos:0}, "Hiperprolactinemia": {aciertos:0,reactivos:0}, "Acromegalia": {aciertos:0,reactivos:0}, "Feocromocitoma": {aciertos:0,reactivos:0}, "Hiperaldosteronismo": {aciertos:0,reactivos:0}, "Hiperparatiroidismo": {aciertos:0,reactivos:0}, "Neoplasia endocrina múltple": {aciertos:0,reactivos:0}, "Alopecia endocrina": {aciertos:0,reactivos:0} },
                 "UROLOGÍA": { "Escroto agudo": {aciertos:0,reactivos:0}, "Torsión testicular": {aciertos:0,reactivos:0}, "Hiperplasia prostática benigna": {aciertos:0,reactivos:0}, "Cáncer de próstata": {aciertos:0,reactivos:0}, "Pielonefritis aguda": {aciertos:0,reactivos:0}, "Infección de tracto urinario": {aciertos:0,reactivos:0}, "Urolitiasis": {aciertos:0,reactivos:0}, "Orquiepididimitis": {aciertos:0,reactivos:0}, "Cáncer testicular": {aciertos:0,reactivos:0}, "Disfunción eréctil": {aciertos:0,reactivos:0}, "Estenosis del meato urinario": {aciertos:0,reactivos:0}, "Hidrocele": {aciertos:0,reactivos:0}, "Varicocele": {aciertos:0,reactivos:0}, "Prostatitis aguda": {aciertos:0,reactivos:0}, "Cáncer de vejiga": {aciertos:0,reactivos:0}, "Cáncer renal": {aciertos:0,reactivos:0}, "Incontinencia urinaria": {aciertos:0,reactivos:0}, "Retención aguda de orina": {aciertos:0,reactivos:0} }
             };
+
+            let dataWasUpdated = false;
             if (!userProgress.topicData) {
                 userProgress.topicData = {};
-                for (const specialty in initialData) {
-                    for (const topic in initialData[specialty]) {
-                        const topicId = generateTopicId(topic);
+            }
+
+            for (const specialty in initialData) {
+                for (const topic in initialData[specialty]) {
+                    const topicId = generateTopicId(topic);
+                    // Solo añade el tema si NO existe en el progreso del usuario
+                    if (!userProgress.topicData[topicId]) {
+                        dataWasUpdated = true;
                         const data = initialData[specialty][topic];
                         userProgress.topicData[topicId] = {
                             scoreAciertos: data.aciertos,
                             scoreReactivos: data.reactivos,
                         };
-                        ALL_TASK_IDS.forEach((taskId, index) => {
-                            // If aciertos/reactivos exist and are high, mark as complete.
-                            const score = data.reactivos > 0 ? (data.aciertos / data.reactivos) : 0;
-                            // Let's consider a topic "done" if the score is > 85% or if aciertos > 0 for topics with no score yet.
-                            // This logic can be adjusted. For now, a completed topic is one with a score.
-                            userProgress.topicData[topicId][taskId] = (score >= 0.85); 
-                        });
-                        // A more specific logic: If a topic has a score, we assume it's fully done.
-                         if (data.aciertos > 0 || data.reactivos > 0) {
+                        // Si el tema tiene puntaje, se considera completado
+                        if (data.aciertos > 0 || data.reactivos > 0) {
                             ALL_TASK_IDS.forEach(taskId => {
                                 userProgress.topicData[topicId][taskId] = true;
                             });
@@ -383,8 +393,10 @@
                     }
                 }
             }
+            return dataWasUpdated;
         }
-        
+        // ========================== FIN DE LA CORRECCIÓN ===========================
+
         function generateStudyPlan() {
             // FASE 1: Temas originales (Genética a Urología)
             const topicsBySpecialtyPart1 = {
@@ -416,7 +428,6 @@
                 plannedDaysPart1.push(dayData);
             }
             
-            // FASE 2: Días fijos de Oftalmología y ORL
             const oftalmoDays = [
                 { date: "2025-06-30", blocks: [ { subject: "OFTALMOLOGÍA", topics: ["Blefaritis", "Orzuelo", "Conjuntivitis (alergica, bacteriana, neonatal, viral)", "Chalazión", "Glaucoma de ángulo abierto", "Glaucoma de ángulo cerrado", "Glaucoma congénito"] } ] },
                 { date: "2025-07-01", blocks: [ { subject: "OFTALMOLOGÍA", topics: ["Degeneración macular", "Desprendimiento de retina", "Retinopatía diabética", "Retinopatía hipertensiva", "Catarata", "Trauma ocular", "Ojo rojo"] } ] }
@@ -425,8 +436,6 @@
                 { date: "2025-07-02", blocks: [ { subject: "ORL", topics: ["Epistaxis", "VPPB", "Parálisis de Bell", "Neuralgia de trigémino", "Neuritis vestibular", "Fracturas nasales"] } ] },
                 { date: "2025-07-03", blocks: [ { subject: "ORL", topics: ["Rinosinusitis", "Faringoamigdalitis", "Angina de Ludwig", "Otitis", "Mastoiditis aguda"] } ] }
             ];
-
-            // FASE 3: Nuevo bloque de estudio de Julio a Septiembre (INTACTO)
             const newStudyBlock = [
                 { date: "2025-07-07", blocks: [ { subject: "TYO", topics: ["Osteoartritis", "Osteomielitis", "Osteosarcoma", "Sarcoma de Ewing", "Tumores óseos malignos", "Embolia grasa"] } ] },
                 { date: "2025-07-08", blocks: [ { subject: "TYO", topics: ["Costilla cervical", "Esguince cervical", "Lumbalgia", "Hernia de disco", "Túnel del carpo", "Síndrome de hombro doloroso"] } ] },
@@ -496,10 +505,8 @@
                 { date: "2025-09-10", blocks: [ { subject: "VACUNAS", topics: ["VPH"] } ] },
             ];
             
-            // Unir todas las partes del plan en el orden correcto
             let finalPlannedDays = [...plannedDaysPart1.reverse(), ...oftalmoDays, ...orlDays, ...newStudyBlock];
             
-            // Rellenar con días vacíos al final para completar el calendario
             let lastPlannedDate = new Date(finalPlannedDays[finalPlannedDays.length - 1].date);
             let finalCalendarDate = new Date('2025-09-30');
             
@@ -511,7 +518,6 @@
             return finalPlannedDays.sort((a,b) => new Date(a.date) - new Date(b.date));
         }
 
-        // --- El resto de funciones (getData, isTopicComplete, etc.) van aquí y no necesitan cambios ---
         function getData(key, defaultValue = null) { const keys = key.split('.'); let result = userProgress; for (const k of keys) { if (result && typeof result === 'object' && k in result) { result = result[k]; } else { return defaultValue; } } return result; }
         function isTopicComplete(topicId) { return ALL_TASK_IDS.every(taskId => getData(`topicData.${topicId}.${taskId}`) === true); }
         function isSubjectComplete(subjectName) { const topicIds = subjectToTopicsMap.get(subjectName); if (!topicIds || topicIds.length === 0) return false; return topicIds.every(topicId => isTopicComplete(topicId)); }
