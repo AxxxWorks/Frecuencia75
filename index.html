@@ -257,10 +257,7 @@
         let countdownTargetDateStr;
         let countdownInterval = null;
         const ALL_TASK_IDS = ['task-1-1', 'task-1-2', 'task-1-3', 'task-2-1', 'task-2-2', 'task-3-1', 'task-4-1', 'task-5-1', 'task-5-2', 'task-6-1'];
-        // ========================= INICIO DE LA CORRECCIÓN =========================
-        // Se añade una versión al plan para forzar la actualización si es necesario.
-        const PLAN_VERSION = 2; 
-        // ========================== FIN DE LA CORRECCIÓN ===========================
+        const PLAN_VERSION = 3; 
         
         let calendarView, boardView, viewSwitcher, calendarContainer, todoContainer, inprogressContainer, doneContainer;
         let dayModal, dayModalOverlay, dayModalTitle, dayModalTopicsContainer, dayModalNotes, saveNoteButton;
@@ -327,17 +324,14 @@
             
             const dataUpdated = migrateInitialProgress();
 
-            // ========================= INICIO DE LA CORRECCIÓN =========================
             const savedPlanVersion = getData('planVersion', 1);
             studyPlan = getData('studyPlan');
 
-            // Si el plan no existe o su versión es antigua, se regenera y se guarda.
             if (!studyPlan || savedPlanVersion < PLAN_VERSION) {
                 studyPlan = generateStudyPlan();
                 saveData('studyPlan', studyPlan);
                 saveData('planVersion', PLAN_VERSION);
             }
-            // ========================== FIN DE LA CORRECCIÓN ===========================
 
             countdownTargetDateStr = getData('countdownTarget', '2025-09-23');
             countdownDatePicker.value = countdownTargetDateStr;
@@ -359,14 +353,8 @@
         function migrateInitialProgress() {
             const initialData = {
                 "ENDOCRINOLOGÍA": {
-                    "Nódulo tiroideo": {aciertos: 5, reactivos: 9},
-                    "Ca tiroides": {aciertos: 5, reactivos: 9},
-                    "Hipotiroidismo": {aciertos: 86, reactivos: 100},
-                    "Hipertiroidismo": {aciertos: 58, reactivos: 100},
-                    "Dislipidemias": {aciertos: 4, reactivos: 9},
-                    "Obesidad": {aciertos: 6, reactivos: 9},
-                    "E. Addison": {aciertos: 6, reactivos: 9},
-                    "Sx Metabólico": {aciertos: 8, reactivos: 9},
+                    "Nódulo tiroideo": {aciertos: 5, reactivos: 9}, "Ca tiroides": {aciertos: 5, reactivos: 9}, "Hipotiroidismo": {aciertos: 86, reactivos: 100}, "Hipertiroidismo": {aciertos: 58, reactivos: 100},
+                    "Dislipidemias": {aciertos: 4, reactivos: 9}, "Obesidad": {aciertos: 6, reactivos: 9}, "E. Addison": {aciertos: 6, reactivos: 9}, "Sx Metabólico": {aciertos: 8, reactivos: 9},
                     "Diabetes mellitus": {aciertos:12,reactivos:15}, "Prediabetes": {aciertos:15,reactivos:15}, "Diabetes en el adulto mayor": {aciertos:6,reactivos:9}, "Diabetes en pediatría": {aciertos:5,reactivos:9}, "Cetoacidosis diabética y EHH": {aciertos:13,reactivos:18}, "Hipoglucemia": {aciertos:6,reactivos:9}, "Enfermedad de Cushing / Síndrome de Cushing": {aciertos:0,reactivos:0}, "Hiperprolactinemia": {aciertos:0,reactivos:0}, "Acromegalia": {aciertos:0,reactivos:0}, "Feocromocitoma": {aciertos:0,reactivos:0}, "Hiperaldosteronismo": {aciertos:0,reactivos:0}, "Hiperparatiroidismo": {aciertos:0,reactivos:0}, "Neoplasia endocrina múltple": {aciertos:0,reactivos:0}, "Alopecia endocrina": {aciertos:0,reactivos:0} 
                 },
                 "ORL": { "Epistaxis": {aciertos: 8, reactivos: 9}, "VPPB": {aciertos: 9, reactivos: 9}, "Parálisis de Bell": {aciertos: 6, reactivos: 9}, "Neuralgia de trigémino": {aciertos: 1, reactivos: 14}, "Neuritis vestibular": {aciertos: 6, reactivos: 9}, "Fracturas nasales": {aciertos: 8, reactivos: 9}, "Rinosinusitis": {aciertos: 6, reactivos: 9}, "Faringoamigdalitis": {aciertos: 6, reactivos: 9}, "Angina de Ludwig": {aciertos: 6, reactivos: 9}, "Otitis": {aciertos: 7, reactivos: 9}, "Mastoiditis aguda": {aciertos: 5, reactivos: 9} },
@@ -446,11 +434,7 @@
                 date: "2025-06-25",
                 blocks: [{
                     subject: "ENDOCRINOLOGÍA",
-                    topics: [
-                        "Nódulo tiroideo", "Ca tiroides", "Hipotiroidismo", 
-                        "Hipertiroidismo", "Dislipidemias", "Obesidad", 
-                        "E. Addison", "Sx Metabólico"
-                    ]
+                    topics: ["Nódulo tiroideo", "Ca tiroides", "Hipotiroidismo", "Hipertiroidismo", "Dislipidemias", "Obesidad", "E. Addison", "Sx Metabólico"]
                 }]
             };
 
@@ -462,75 +446,46 @@
                 { date: "2025-07-02", blocks: [ { subject: "ORL", topics: ["Epistaxis", "VPPB", "Parálisis de Bell", "Neuralgia de trigémino", "Neuritis vestibular", "Fracturas nasales"] } ] },
                 { date: "2025-07-03", blocks: [ { subject: "ORL", topics: ["Rinosinusitis", "Faringoamigdalitis", "Angina de Ludwig", "Otitis", "Mastoiditis aguda"] } ] }
             ];
-            const newStudyBlock = [
-                { date: "2025-07-07", blocks: [ { subject: "TYO", topics: ["Osteoartritis", "Osteomielitis", "Osteosarcoma", "Sarcoma de Ewing", "Tumores óseos malignos", "Embolia grasa"] } ] },
-                { date: "2025-07-08", blocks: [ { subject: "TYO", topics: ["Costilla cervical", "Esguince cervical", "Lumbalgia", "Hernia de disco", "Túnel del carpo", "Síndrome de hombro doloroso"] } ] },
-                { date: "2025-07-09", blocks: [ { subject: "TYO", topics: ["Fractura de clavícula", "Fractura de húmero proximal", "Luxación glenohumeral", "Luxación de codo", "Codo de niñera", "Fracturas de codo"] } ] },
-                { date: "2025-07-10", blocks: [ { subject: "TYO", topics: ["Fracturas de antebrazo", "Fractura de radio distal", "Lesiones fisiarias", "Fracturas expuestas", "Fractura de cadera", "Epifisiolistesis femoral"] } ] },
-                { date: "2025-07-11", blocks: [ { subject: "TYO", topics: ["Legg Calvé Perthes", "Luxación coxofemoral", "Lesiones de rodilla", "Fractura de diáfisis de tibia", "Esguince de tobillo", "Fractura de tobillo"] } ] },
-                { date: "2025-07-12", blocks: [ { subject: "TYO", topics: ["Rotura de talón de Aquiles", "Pie equino varo", "Pie plano"] }, { subject: "CARDIOLOGÍA", topics: ["Fiebre reumática", "Estenosis aórtica", "Insuficiencia aórtica"] } ] },
-                { date: "2025-07-13", blocks: [ { subject: "CARDIOLOGÍA", topics: ["Estenosis mitral", "Insuficiencia mitral", "Otras valvulopatías", "Pericarditis", "Endocarditis infecciosa", "Infarto agudo de miocardio"] } ] },
-                { date: "2025-07-14", blocks: [ { subject: "CARDIOLOGÍA", topics: ["Enfermedad coronaria", "Disección aórtica", "Aneurisma aórtico abdominal", "Cor pulmonar crónico", "Hipertensión arterial sistémica", "Crisis hipertensivas"] } ] },
-                { date: "2025-07-15", blocks: [ { subject: "CARDIOLOGÍA", topics: ["Hipertensión pulmonar", "Insuficiencia cardíaca aguda", "Insuficiencia cardíaca crónica", "Edema pulmonar", "Hipotensión ortostática", "Rehabilitación cardíaca"] } ] },
-                { date: "2025-07-16", blocks: [ { subject: "ANGIOLOGÍA", topics: ["Enfermedad arterial periférica", "Insuficiencia venosa", "Pie diabético", "Trombosis venosa profunda", "Tromboembolia pulmonar", "Paget Schroetter"] } ] },
-                { date: "2025-07-17", blocks: [ { subject: "ANGIOLOGÍA", topics: ["Tromboembolia venosa en obstetricia", "Úlceras por presión"] }, { subject: "ACLS", topics: ["Soporte vital básico", "RCP", "Taquicardia ACLS", "Taquicardia supraventricular"] } ] },
-                { date: "2025-07-18", blocks: [ { subject: "ACLS", topics: ["Bloqueos AV", "Bradicardia", "Fibrilación auricular", "Fibrilación ventricular", "Síndrome de WPW", "PLS"] } ] },
-                { date: "2025-07-19", blocks: [ { subject: "ACLS", topics: ["Ahogamiento"] }, { subject: "ATLS", topics: ["Politrauma", "Tipos de shock", "Choque hipovolémico", "Shock neurogénico", "TCE adultos"] } ] },
-                { date: "2025-07-20", blocks: [ { subject: "ATLS", topics: ["TCE pediátrico", "Fracturas de cráneo", "Trauma torácico", "Hemotórax", "Neumotórax a tensión", "Neumotórax abierto"] } ] },
-                { date: "2025-07-21", blocks: [ { subject: "ATLS", topics: ["Neumotórax simple", "Taponamiento cardíaco", "Lesión traqueobronquial", "Trauma abdominal", "Ruptura diafragmática", "Trauma esplénico"] } ] },
-                { date: "2025-07-22", blocks: [ { subject: "ATLS", topics: ["Trauma espinal", "Trauma pélvico", "Trauma obstétrico", "Quemaduras", "Gran quemado", "Catéter venoso central"] } ] },
-                { date: "2025-07-23", blocks: [ { subject: "ATLS", topics: ["Hipotermia"] }, { subject: "TOXICOLOGÍA", topics: ["Manejo de intoxicaciones", "Toxíndromes", "Intoxicación por benzodiacepinas", "Intoxicación por organofosforados", "Intoxicación por paracetamol"] } ] },
-                { date: "2025-07-24", blocks: [ { subject: "TOXICOLOGÍA", topics: ["Intoxicación por salicilatos", "Intoxicación por etanol", "Intoxicación por monóxido de carbono", "Intoxicación por opiáceos", "Intoxicación por anfetaminas", "Intoxicación por fentanilo"] } ] },
-                { date: "2025-07-25", blocks: [ { subject: "TOXICOLOGÍA", topics: ["Intoxicación por DMT", "Intoxicación por hidrocarburos", "Intoxicación por metales pesados", "Intoxicación por plomo", "Intoxicación por alcoholes", "Ingesta de cáusticos"] } ] },
-                { date: "2025-07-26", blocks: [ { subject: "TOXICOLOGÍA", topics: ["Intoxicación alimentaria", "Anafilaxia", "Picadura de alacrán", "Mordedura de serpiente", "Lactrodectus", "Loxosceles"] } ] },
-                { date: "2025-07-27", blocks: [ { subject: "TOXICOLOGÍA", topics: ["Picadura de himenópteros", "Golpe de calor"] }, { subject: "GASTROENTEROLOGÍA", topics: ["Reflujo ERGE", "Enfermedad ácido péptica", "Síndrome de intestino irritable", "Dispepsia funcional"] } ] },
-                { date: "2025-07-28", blocks: [ { subject: "GASTROENTEROLOGÍA", topics: ["Mallory Weiss", "Zollinger Ellison", "Acalasia", "Esófago de Barrett", "Enfermedad celíaca", "Enfermedad de Crohn"] } ] },
-                { date: "2025-07-29", blocks: [ { subject: "GASTROENTEROLOGÍA", topics: ["Colitis ulcerativa", "Enfermedad diverticular", "Sangrado TDA", "Sangrado TDB", "Varices esofágicas", "EHGNA"] } ] },
-                { date: "2025-07-30", blocks: [ { subject: "GASTROENTEROLOGÍA", topics: ["Hepatitis A", "Hepatitis B", "Hepatitis C", "Hepatitis autoinmune", "Absceso hepático amebiano", "Absceso hepático piógeno"] } ] },
-                { date: "2025-07-31", blocks: [ { subject: "GASTROENTEROLOGÍA", topics: ["Cirrosis hepática", "Insuficiencia hepática", "Ascitis", "Encefalopatía hepática", "Pancreatitis aguda", "Pancreatitis crónica"] } ] },
-                { date: "2025-08-01", blocks: [ { subject: "GASTROENTEROLOGÍA", topics: ["Cáncer gástrico", "Cáncer de esófago", "Cáncer de páncreas", "Carcinoma hepatocelular"] }, { subject: "CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA", topics: ["Apendicitis aguda", "Apendicitis en el embarazo"] } ] },
-                { date: "2025-08-02", blocks: [ { subject: "CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA", topics: ["Hernias", "Hernia inguinal", "Hernia femoral", "Hernia hiatal", "Hernia umbilical", "Hernia ventral"] } ] },
-                { date: "2025-08-03", blocks: [ { subject: "CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA", topics: ["Colecistitis aguda", "Colelitiasis", "Coledocolitiasis", "Colangitis aguda", "Oclusión intestinal", "Isquemia intestinal"] } ] },
-                { date: "2025-08-04", blocks: [ { subject: "CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA", topics: ["Vólvulo de sigmoides", "Vólvulo de ciego", "Enfermedad hemorroidal", "Fístula anal", "Fisura anal", "Absceso anal"] } ] },
-                { date: "2025-08-05", blocks: [ { subject: "CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA", topics: ["Quiste pilonidal", "Cáncer colorrectal", "Poliposis adenomatosa familiar PAF", "Fístulas biliointestinales", "Colangiocarcinoma", "Complicaciones post Qx"] } ] },
-                { date: "2025-08-06", blocks: [ { subject: "CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA", topics: ["Heridas quirúrgicas"] }, { subject: "CIRUGÍA PEDIÁTRICA", topics: ["Atresia esofágica", "Atresia duodenal", "Atresia yeyunoileal", "Atresia biliar", "Atresia de coanas"] } ] },
-                { date: "2025-08-07", blocks: [ { subject: "CIRUGÍA PEDIÁTRICA", topics: ["Estenosis pilórica", "Hernia diafragmática congénita", "Malrotación intestinal", "Invaginación intestinal", "Divertículo de Meckel", "Hirschsprung"] } ] },
-                { date: "2025-08-08", blocks: [ { subject: "CIRUGÍA PEDIÁTRICA", topics: ["Enfermedad de Hirschsprung", "Patología umbilical", "Criptorquidia", "Espina bífida", "Malformaciones rectales", "Retinoblastoma"] } ] },
-                { date: "2025-08-09", blocks: [ { subject: "CIRUGÍA PEDIÁTRICA", topics: ["Nefroblastoma", "Neuroblastoma", "Tumor abdominal"] }, { subject: "GINECOLOGÍA", topics: ["Amenorreas primarias", "Amenorreas secundarias", "Sangrado uterino anormal"] } ] },
-                { date: "2025-08-10", blocks: [ { subject: "GINECOLOGÍA", topics: ["Dismenorrea aguda", "Adenomiosis", "Endometriosis", "Miomatosis uterina", "Hiperplasia endometrial", "Quiste de ovario benigno"] } ] },
-                { date: "2025-08-11", blocks: [ { subject: "GINECOLOGÍA", topics: ["Torsión ovárica", "Ovario poliquístico", "Enfermedad pélvica inflamatoria", "Hidrosalpinx", "Fitz-Hugh-Curtis", "Vaginitis bacteriana"] } ] },
-                { date: "2025-08-12", blocks: [ { subject: "GINECOLOGÍA", topics: ["Vaginitis infecciosa", "Tricomoniasis", "Bartolinitis", "Candidiasis vulvovaginal", "Chlamydia", "Mastitis"] } ] },
-                { date: "2025-08-13", blocks: [ { subject: "GINECOLOGÍA", topics: ["Mastopatía fibroquística", "Fibroadenoma", "Papiloma intraductal", "Quiste mamario", "Patología mamaria benigna", "Osteoporosis post menopausia"] } ] },
-                { date: "2025-08-14", blocks: [ { subject: "GINECOLOGÍA", topics: ["Menopausia y climaterio", "Insuficiencia ovárica primaria", "Anticonceptivos generalidades", "Anticonceptivos GPC", "Anticonceptivos hormonales combinados", "Anticoncepción de emergencia"] } ] },
-                { date: "2025-08-15", blocks: [ { subject: "GINECOLOGÍA", topics: ["DIU de cobre", "DIU de levonorgestrel", "Implante subdérmico", "Progestágenos solos", "Lactancia como anticonceptivo", "Condón"] } ] },
-                { date: "2025-08-16", blocks: [ { subject: "GINECOLOGÍA", topics: ["Vasectomía", "Oclusión tubaria bilateral OTB", "Infertilidad", "Cistocele e incontinencia"] }, { subject: "ONCOGINE", topics: ["Tamizaje cáncer de mama", "Cáncer de mama"] } ] },
-                { date: "2025-08-17", blocks: [ { subject: "ONCOGINE", topics: ["Cáncer cérvicouterino", "Cáncer de endometrio", "Cáncer de ovario", "Cáncer de vagina", "Tumores anexiales"] }, { subject: "OBSTETRICIA", topics: ["Control prenatal"] } ] },
-                { date: "2025-08-18", blocks: [ { subject: "OBSTETRICIA", topics: ["Aloinmunización materna", "Estática fetal", "Tipos de pelvis", "Atención del parto", "Manejo activo del parto", "Cesárea"] } ] },
-                { date: "2025-08-19", blocks: [ { subject: "OBSTETRICIA", topics: ["Parto pretérmino", "Puerperio fisiológico", "Líquido amniótico", "Ruptura prematura de membranas", "Corioamnionitis", "Distocias"] } ] },
-                { date: "2025-08-20", blocks: [ { subject: "OBSTETRICIA", topics: ["Embarazo múltiple", "Endometritis puerperal", "Hiperémesis gravídica", "Insuficiencia cervical", "Muerte fetal", "Enfermedades hipertensivas del embarazo"] } ] },
-                { date: "2025-08-21", blocks: [ { subject: "OBSTETRICIA", topics: ["Preeclampsia sin datos de severidad", "Síndrome de HELLP", "Diabetes gestacional", "IVU en el embarazo", "Restricción del crecimiento intrauterino", "Sepsis puerperal"] } ] },
-                { date: "2025-08-22", blocks: [ { subject: "OBSTETRICIA", topics: ["Síndrome de Sheehan", "Depresión posparto"] }, { subject: "HEMORRAGIAS OBSTÉTRICAS", topics: ["Generalidades de hemorragias", "Hemorragia postparto", "Desgarro perineal", "Amenaza de aborto"] } ] },
-                { date: "2025-08-23", blocks: [ { subject: "HEMORRAGIAS OBSTÉTRICAS", topics: ["Aborto espontáneo", "Acretismo placentario", "Atonía uterina", "Choque hemorrágico en obstetricia", "Desprendimiento prematuro de placenta normoinserta", "Embarazo ectópico"] } ] },
-                { date: "2025-08-24", blocks: [ { subject: "HEMORRAGias OBSTÉTRICAS", topics: ["Placenta previa", "Ruptura uterina", "Vasa previa", "Enfermedad trofoblástica gestacional"] }, { subject: "NEONATOLOGÍA", topics: ["APGAR", "Reanimación neonatal"] } ] },
-                { date: "2025-08-25", blocks: [ { subject: "NEONATOLOGÍA", topics: ["Prematuro sano", "Recién nacido de término", "Apnea del prematuro", "Asfixia neonatal", "Síndrome de dificultad respiratoria", "Taquipnea transitoria del recién nacido"] } ] },
-                { date: "2025-08-26", blocks: [ { subject: "NEONATOLOGÍA", topics: ["Síndrome de aspiración de meconio", "Displasia broncopulmonar", "Silverman Anderson", "Maduración pulmonar", "Encefalopatía hipóxica", "Enfermedad hemorrágica del recién nacido"] } ] },
-                { date: "2025-08-27", blocks: [ { subject: "NEONATOLOGÍA", topics: ["Enterocolitis necrotizante", "Hipoacusia neonatal", "Hipoglucemia neonatal", "Ictericia neonatal", "Muerte súbita del lactante", "Sepsis neonatal"] } ] },
-                { date: "2025-08-28", blocks: [ { subject: "NEONATOLOGÍA", topics: ["Tamiz neonatal", "Lesiones de plexo braquial obstétrico", "Lesiones extracraneales", "Displasia del desarrollo de la cadera DDC"] }, { subject: "CONGENITAS", topics: ["Cardiopatías congénitas", "Tetralogía de Fallot"] } ] },
-                { date: "2025-08-29", blocks: [ { subject: "CONGENITAS", topics: ["Coartación aórtica", "Persistencia del conducto arterioso", "Fibrosis quística", "Fenilcetonuria", "Galactosemia clásica", "STORCH"] } ] },
-                { date: "2025-08-30", blocks: [ { subject: "CONGENITAS", topics: ["STORCH Citomegalovirus", "STORCH Herpes simple", "STORCH Rubéola congénita", "STORCH Sífilis congénita", "STORCH Toxoplasmosis", "STORCH Varicela congénita"] } ] },
-                { date: "2025-08-31", blocks: [ { subject: "ESCOLAR", topics: ["Control de niño sano", "Etapas del crecimiento", "Talla baja", "Alergia alimentaria", "Cuerpo extraño", "Dermatitis del pañal"] } ] },
-                { date: "2025-09-01", blocks: [ { subject: "ESCOLAR", topics: ["Estreñimiento funcional", "Hiperplasia adrenal congénita", "Hipotiroidismo congénito", "Maltrato infantil", "Mucopolisacaridosis", "Reflujo gastroesofágico del lactante"] } ] },
-                { date: "2025-09-02", blocks: [ { subject: "NUTRICIÓN PEDIÁTRICA", topics: ["Lactancia materna", "Alimentación complementaria", "Desnutrición pediátrica", "Deficiencia de vitamina A", "Hipovitaminosis", "Raquitismo carencial"] } ] },
-                { date: "2025-09-03", blocks: [ { subject: "NUTRICIÓN PEDIÁTRICA", topics: ["Pelagra en niños", "Intolerancia a la lactosa", "Obesidad en escolares", "Síndrome metabólico en niños"] }, { subject: "INFECTOLOGÍA PEDIÁTRICA", topics: ["Adenitis mesentérica", "Onfalitis"] } ] },
-                { date: "2025-09-04", blocks: [ { subject: "INFECTOLOGÍA PEDIÁTRICA", topics: ["Exantemáticas Diferencial", "Eritema infeccioso", "Escarlatina", "Exantema súbito", "Enfermedad de Kawasaki", "Síndrome mano pie boca"] } ] },
-                { date: "2025-09-05", blocks: [ { subject: "INFECTOLOGÍA PEDIÁTRICA", topics: ["Rubéola", "Sarampión", "Varicela", "Parotiditis", "Bronquiolitis", "Epiglotitis"] } ] },
-                { date: "2025-09-06", blocks: [ { subject: "INFECTOLOGÍA PEDIÁTRICA", topics: ["Laringotraqueitis CRUP", "Mononucleosis infecciosa", "Tos ferina", "IVU en menores"] }, { subject: "VACUNAS", topics: ["Vacunas generalidades", "Tipos de vacunas"] } ] },
-                { date: "2025-09-07", blocks: [ { subject: "VACUNAS", topics: ["Vacunación universal", "Aplicación de vacunas", "Vacuna para personal de salud", "Vacunas en el embarazo", "Esquema de vacunación", "BCG"] } ] },
-                { date: "2025-09-08", blocks: [ { subject: "VACUNAS", topics: ["Hepatitis A", "Hepatitis B", "Hexavalente", "Influenza", "Neumocócica", "Rotavirus"] } ] },
-                { date: "2025-09-09", blocks: [ { subject: "VACUNAS", topics: ["Sabin", "Salmonella", "DPT", "SRP", "Tétanos", "Varicela"] } ] },
-                { date: "2025-09-10", blocks: [ { subject: "VACUNAS", topics: ["VPH"] } ] },
-            ];
             
+            // ========================= INICIO DE LA CORRECCIÓN =========================
+            // Lógica de distribución dinámica para los temas de Julio a Septiembre
+            const newTopicsBySpecialty = { "TYO": ["Osteoartritis", "Osteomielitis", "Osteosarcoma", "Sarcoma de Ewing", "Tumores óseos malignos", "Embolia grasa", "Costilla cervical", "Esguince cervical", "Lumbalgia", "Hernia de disco", "Túnel del carpo", "Síndrome de hombro doloroso", "Fractura de clavícula", "Fractura de húmero proximal", "Luxación glenohumeral", "Luxación de codo", "Codo de niñera", "Fracturas de codo", "Fracturas de antebrazo", "Fractura de radio distal", "Lesiones fisiarias", "Fracturas expuestas", "Fractura de cadera", "Epifisiolistesis femoral", "Legg Calvé Perthes", "Luxación coxofemoral", "Lesiones de rodilla", "Fractura de diáfisis de tibia", "Esguince de tobillo", "Fractura de tobillo", "Rotura de talón de Aquiles", "Pie equino varo", "Pie plano"], "CARDIOLOGÍA": ["Fiebre reumática", "Estenosis aórtica", "Insuficiencia aórtica", "Estenosis mitral", "Insuficiencia mitral", "Otras valvulopatías", "Pericarditis", "Endocarditis infecciosa", "Infarto agudo de miocardio", "Enfermedad coronaria", "Disección aórtica", "Aneurisma aórtico abdominal", "Cor pulmonar crónico", "Hipertensión arterial sistémica", "Crisis hipertensivas", "Hipertensión pulmonar", "Insuficiencia cardíaca aguda", "Insuficiencia cardíaca crónica", "Edema pulmonar", "Hipotensión ortostática", "Rehabilitación cardíaca"], "ANGIOLOGÍA": ["Enfermedad arterial periférica", "Insuficiencia venosa", "Pie diabético", "Trombosis venosa profunda", "Tromboembolia pulmonar", "Paget Schroetter", "Tromboembolia venosa en obstetricia", "Úlceras por presión"], "ACLS": ["Soporte vital básico", "RCP", "Taquicardia ACLS", "Taquicardia supraventricular", "Bloqueos AV", "Bradicardia", "Fibrilación auricular", "Fibrilación ventricular", "Síndrome de WPW", "PLS", "Ahogamiento"], "ATLS": ["Politrauma", "Tipos de shock", "Choque hipovolémico", "Shock neurogénico", "TCE adultos", "TCE pediátrico", "Fracturas de cráneo", "Trauma torácico", "Hemotórax", "Neumotórax a tensión", "Neumotórax abierto", "Neumotórax simple", "Taponamiento cardíaco", "Lesión traqueobronquial", "Trauma abdominal", "Ruptura diafragmática", "Trauma esplénico", "Trauma espinal", "Trauma pélvico", "Trauma obstétrico", "Quemaduras", "Gran quemado", "Catéter venoso central", "Hipotermia"], "TOXICOLOGÍA": ["Manejo de intoxicaciones", "Toxíndromes", "Intoxicación por benzodiacepinas", "Intoxicación por organofosforados", "Intoxicación por paracetamol", "Intoxicación por salicilatos", "Intoxicación por etanol", "Intoxicación por monóxido de carbono", "Intoxicación por opiáceos", "Intoxicación por anfetaminas", "Intoxicación por fentanilo", "Intoxicación por DMT", "Intoxicación por hidrocarburos", "Intoxicación por metales pesados", "Intoxicación por plomo", "Intoxicación por alcoholes", "Ingesta de cáusticos", "Intoxicación alimentaria", "Anafilaxia", "Picadura de alacrán", "Mordedura de serpiente", "Lactrodectus", "Loxosceles", "Picadura de himenópteros", "Golpe de calor"], "GASTROENTEROLOGÍA": ["Reflujo ERGE", "Enfermedad ácido péptica", "Síndrome de intestino irritable", "Dispepsia funcional", "Mallory Weiss", "Zollinger Ellison", "Acalasia", "Esófago de Barrett", "Enfermedad celíaca", "Enfermedad de Crohn", "Colitis ulcerativa", "Enfermedad diverticular", "Sangrado TDA", "Sangrado TDB", "Varices esofágicas", "EHGNA", "Hepatitis A", "Hepatitis B", "Hepatitis C", "Hepatitis autoinmune", "Absceso hepático amebiano", "Absceso hepático piógeno", "Cirrosis hepática", "Insuficiencia hepática", "Ascitis", "Encefalopatía hepática", "Pancreatitis aguda", "Pancreatitis crónica", "Cáncer gástrico", "Cáncer de esófago", "Cáncer de páncreas", "Carcinoma hepatocelular"], "CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA": ["Apendicitis aguda", "Apendicitis en el embarazo", "Hernias", "Hernia inguinal", "Hernia femoral", "Hernia hiatal", "Hernia umbilical", "Hernia ventral", "Colecistitis aguda", "Colelitiasis", "Coledocolitiasis", "Colangitis aguda", "Oclusión intestinal", "Isquemia intestinal", "Vólvulo de sigmoides", "Vólvulo de ciego", "Enfermedad hemorroidal", "Fístula anal", "Fisura anal", "Absceso anal", "Quiste pilonidal", "Cáncer colorrectal", "Poliposis adenomatosa familiar PAF", "Fístulas biliointestinales", "Colangiocarcinoma", "Complicaciones post Qx", "Heridas quirúrgicas"], "CIRUGÍA PEDIÁTRICA": ["Atresia esofágica", "Atresia duodenal", "Atresia yeyunoileal", "Atresia biliar", "Atresia de coanas", "Estenosis pilórica", "Hernia diafragmática congénita", "Malrotación intestinal", "Invaginación intestinal", "Divertículo de Meckel", "Hirschsprung", "Enfermedad de Hirschsprung", "Patología umbilical", "Criptorquidia", "Espina bífida", "Malformaciones rectales", "Retinoblastoma", "Nefroblastoma", "Neuroblastoma", "Tumor abdominal"], "GINECOLOGÍA": ["Amenorreas primarias", "Amenorreas secundarias", "Sangrado uterino anormal", "Dismenorrea aguda", "Adenomiosis", "Endometriosis", "Miomatosis uterina", "Hiperplasia endometrial", "Quiste de ovario benigno", "Torsión ovárica", "Ovario poliquístico", "Enfermedad pélvica inflamatoria", "Hidrosalpinx", "Fitz-Hugh-Curtis", "Vaginitis bacteriana", "Vaginitis infecciosa", "Tricomoniasis", "Bartolinitis", "Candidiasis vulvovaginal", "Chlamydia", "Mastitis", "Mastopatía fibroquística", "Fibroadenoma", "Papiloma intraductal", "Quiste mamario", "Patología mamaria benigna", "Osteoporosis post menopausia", "Menopausia y climaterio", "Insuficiencia ovárica primaria", "Anticonceptivos generalidades", "Anticonceptivos GPC", "Anticonceptivos hormonales combinados", "Anticoncepción de emergencia", "DIU de cobre", "DIU de levonorgestrel", "Implante subdérmico", "Progestágenos solos", "Lactancia como anticonceptivo", "Condón", "Vasectomía", "Oclusión tubaria bilateral OTB", "Infertilidad", "Cistocele e incontinencia"], "ONCOGINE": ["Tamizaje cáncer de mama", "Cáncer de mama", "Cáncer cérvicouterino", "Cáncer de endometrio", "Cáncer de ovario", "Cáncer de vagina", "Tumores anexiales"], "OBSTETRICIA": ["Control prenatal", "Aloinmunización materna", "Estática fetal", "Tipos de pelvis", "Atención del parto", "Manejo activo del parto", "Cesárea", "Parto pretérmino", "Puerperio fisiológico", "Líquido amniótico", "Ruptura prematura de membranas", "Corioamnionitis", "Distocias", "Embarazo múltiple", "Endometritis puerperal", "Hiperémesis gravídica", "Insuficiencia cervical", "Muerte fetal", "Enfermedades hipertensivas del embarazo", "Preeclampsia sin datos de severidad", "Síndrome de HELLP", "Diabetes gestacional", "IVU en el embarazo", "Restricción del crecimiento intrauterino", "Sepsis puerperal", "Síndrome de Sheehan", "Depresión posparto"], "HEMORRAGIAS OBSTÉTRICAS": ["Generalidades de hemorragias", "Hemorragia postparto", "Desgarro perineal", "Amenaza de aborto", "Aborto espontáneo", "Acretismo placentario", "Atonía uterina", "Choque hemorrágico en obstetricia", "Desprendimiento prematuro de placenta normoinserta", "Embarazo ectópico", "Placenta previa", "Ruptura uterina", "Vasa previa", "Enfermedad trofoblástica gestacional"], "NEONATOLOGÍA": ["APGAR", "Reanimación neonatal", "Prematuro sano", "Recién nacido de término", "Apnea del prematuro", "Asfixia neonatal", "Síndrome de dificultad respiratoria", "Taquipnea transitoria del recién nacido", "Síndrome de aspiración de meconio", "Displasia broncopulmonar", "Silverman Anderson", "Maduración pulmonar", "Encefalopatía hipóxica", "Enfermedad hemorrágica del recién nacido", "Enterocolitis necrotizante", "Hipoacusia neonatal", "Hipoglucemia neonatal", "Ictericia neonatal", "Muerte súbita del lactante", "Sepsis neonatal", "Tamiz neonatal", "Lesiones de plexo braquial obstétrico", "Lesiones extracraneales", "Displasia del desarrollo de la cadera DDC"], "CONGENITAS": ["Cardiopatías congénitas", "Tetralogía de Fallot", "Coartación aórtica", "Persistencia del conducto arterioso", "Fibrosis quística", "Fenilcetonuria", "Galactosemia clásica", "STORCH", "STORCH Citomegalovirus", "STORCH Herpes simple", "STORCH Rubéola congénita", "STORCH Sífilis congénita", "STORCH Toxoplasmosis", "STORCH Varicela congénita"], "ESCOLAR": ["Control de niño sano", "Etapas del crecimiento", "Talla baja", "Alergia alimentaria", "Cuerpo extraño", "Dermatitis del pañal", "Estreñimiento funcional", "Hiperplasia adrenal congénita", "Hipotiroidismo congénito", "Maltrato infantil", "Mucopolisacaridosis", "Reflujo gastroesofágico del lactante"], "NUTRICIÓN PEDIÁTRICA": ["Lactancia materna", "Alimentación complementaria", "Desnutrición pediátrica", "Deficiencia de vitamina A", "Hipovitaminosis", "Raquitismo carencial", "Pelagra en niños", "Intolerancia a la lactosa", "Obesidad en escolares", "Síndrome metabólico en niños"], "INFECTOLOGÍA PEDIÁTRICA": ["Adenitis mesentérica", "Onfalitis", "Exantemáticas Diferencial", "Eritema infeccioso", "Escarlatina", "Exantema súbito", "Enfermedad de Kawasaki", "Síndrome mano pie boca", "Rubéola", "Sarampión", "Varicela", "Parotiditis", "Bronquiolitis", "Epiglotitis", "Laringotraqueitis CRUP", "Mononucleosis infecciosa", "Tos ferina", "IVU en menores"], "VACUNAS": ["Vacunas generalidades", "Tipos de vacunas", "Vacunación universal", "Aplicación de vacunas", "Vacuna para personal de salud", "Vacunas en el embarazo", "Esquema de vacunación", "BCG", "Hepatitis A", "Hepatitis B", "Hexavalente", "Influenza", "Neumocócica", "Rotavirus", "Sabin", "Salmonella", "DPT", "SRP", "Tétanos", "Varicela", "VPH"] };
+            let flatTopicList = [];
+            for (const specialty in newTopicsBySpecialty) {
+                newTopicsBySpecialty[specialty].forEach(topic => flatTopicList.push({ specialty, topic }));
+            }
+
+            const newStudyBlock = [];
+            const startDate = new Date('2025-07-07T00:00:00');
+            const endDate = new Date('2025-09-19T00:00:00');
+            const daysInRange = Math.round((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+            const topicsPerDayBase = Math.floor(flatTopicList.length / daysInRange);
+            let extraTopics = flatTopicList.length % daysInRange;
+            
+            let topicIndex = 0;
+            let currentDate = new Date(startDate);
+            while (currentDate <= endDate && topicIndex < flatTopicList.length) {
+                let chunkSize = topicsPerDayBase + (extraTopics > 0 ? 1 : 0);
+                const chunk = flatTopicList.slice(topicIndex, topicIndex + chunkSize);
+                if (chunk.length > 0) {
+                    const dayData = { date: currentDate.toISOString().split('T')[0], blocks: [] };
+                    let lastSpecialty = null;
+                    chunk.forEach(item => {
+                        if (item.specialty !== lastSpecialty) {
+                            dayData.blocks.push({ subject: item.specialty, topics: [item.topic] });
+                            lastSpecialty = item.specialty;
+                        } else {
+                            dayData.blocks[dayData.blocks.length - 1].topics.push(item.topic);
+                        }
+                    });
+                    newStudyBlock.push(dayData);
+                }
+                topicIndex += chunkSize;
+                if (extraTopics > 0) extraTopics--;
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            // ========================== FIN DE LA CORRECCIÓN ===========================
+
             let finalPlannedDays = [...plannedDaysPart1.reverse(), endoDay, ...oftalmoDays, ...orlDays, ...newStudyBlock];
             
             let lastPlannedDate = new Date(finalPlannedDays[finalPlannedDays.length - 1].date);
