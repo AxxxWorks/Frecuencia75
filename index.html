@@ -257,7 +257,9 @@
         let countdownTargetDateStr;
         let countdownInterval = null;
         const ALL_TASK_IDS = ['task-1-1', 'task-1-2', 'task-1-3', 'task-2-1', 'task-2-2', 'task-3-1', 'task-4-1', 'task-5-1', 'task-5-2', 'task-6-1'];
-        const PLAN_VERSION = 3; 
+        // ========================= INICIO DE LA MODIFICACIÓN =========================
+        const PLAN_VERSION = 4; // Se incrementa la versión para forzar la regeneración del plan
+        // ========================== FIN DE LA MODIFICACIÓN ===========================
         
         let calendarView, boardView, viewSwitcher, calendarContainer, todoContainer, inprogressContainer, doneContainer;
         let dayModal, dayModalOverlay, dayModalTitle, dayModalTopicsContainer, dayModalNotes, saveNoteButton;
@@ -454,10 +456,8 @@
             }
 
             const newStudyBlock = [];
-            // ========================= INICIO DE LA MODIFICACIÓN =========================
             const startDate = new Date('2025-07-10T00:00:00');
             const endDate = new Date('2025-09-20T00:00:00');
-            // ========================== FIN DE LA MODIFICACIÓN ===========================
             const daysInRange = Math.round((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
             const topicsPerDayBase = Math.floor(flatTopicList.length / daysInRange);
             let extraTopics = flatTopicList.length % daysInRange;
