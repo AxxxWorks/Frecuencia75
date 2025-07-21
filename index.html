@@ -257,7 +257,7 @@
         let countdownTargetDateStr;
         let countdownInterval = null;
         const ALL_TASK_IDS = ['task-1-1', 'task-1-2', 'task-1-3', 'task-2-1', 'task-2-2', 'task-3-1', 'task-4-1', 'task-5-1', 'task-5-2', 'task-6-1'];
-        const PLAN_VERSION = 6; // Se incrementa la versión para forzar la regeneración del plan modificado
+        const PLAN_VERSION = 7; // Se incrementa la versión para forzar la regeneración del plan modificado
         
         let calendarView, boardView, viewSwitcher, calendarContainer, todoContainer, inprogressContainer, doneContainer;
         let dayModal, dayModalOverlay, dayModalTitle, dayModalTopicsContainer, dayModalNotes, saveNoteButton;
@@ -431,9 +431,8 @@
 
             // 2.1. Definir los bloques de temas
             const tyoTopics = { "TYO": allNewTopicsBySpecialty["TYO"] };
-            const vaccineTopics = { "VACUNAS": allNewTopicsBySpecialty["VACUNAS"] };
             
-            // Creamos un nuevo objeto para el bloque principal, manteniendo el orden original
+            // Creamos un nuevo objeto para el bloque principal, manteniendo el orden original y excluyendo vacunas y tyo
             const mainAndCardioTopics = {};
             const specialtyOrder = ["CARDIOLOGÍA", "ANGIOLOGÍA", "ACLS", "ATLS", "TOXICOLOGÍA", "GASTROENTEROLOGÍA", "CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA", "CIRUGÍA PEDIÁTRICA", "GINECOLOGÍA", "ONCOGINE", "OBSTETRICIA", "HEMORRAGIAS OBSTÉTRICAS", "NEONATOLOGÍA", "CONGENITAS", "ESCOLAR", "NUTRICIÓN PEDIÁTRICA", "INFECTOLOGÍA PEDIÁTRICA"];
             specialtyOrder.forEach(specialty => {
@@ -443,9 +442,9 @@
             });
             
             // 2.2. Función auxiliar para planificar
-            const scheduleBlock = (specialties, startDateStr, endDateStr) => {
+            const scheduleBlock = (specialties, startDateStr, endDateStr, order = null) => {
                 let flatList = [];
-                const keys = (specialties === mainAndCardioTopics) ? specialtyOrder : Object.keys(specialties);
+                const keys = order ? order : Object.keys(specialties);
                 keys.forEach(specialty => {
                     if(specialties[specialty]) {
                        specialties[specialty].forEach(topic => flatList.push({ specialty, topic }));
@@ -484,9 +483,11 @@
             };
 
             // 2.3. Planificar cada bloque con sus fechas correspondientes
-            const tyoBlock = scheduleBlock(tyoTopics, '2025-07-10', '2025-07-18');
-            const mainAndCardioBlock = scheduleBlock(mainAndCardioTopics, '2025-07-19', '2025-09-18');
-            const vaccineBlock = scheduleBlock(vaccineTopics, '2025-09-19', '2025-09-20');
+            const tyoBlock = scheduleBlock(tyoTopics, '2025-07-10', '2025-07-19');
+            const mainAndCardioBlock = scheduleBlock(mainAndCardioTopics, '2025-07-20', '2025-09-19', specialtyOrder);
+            const vaccineBlock = [
+                 { date: '2025-09-20', blocks: [{ subject: 'VACUNAS', topics: allNewTopicsBySpecialty["VACUNAS"] }] }
+            ];
 
             // 2.4. Combinar todos los bloques
             let finalPlannedDays = [ ...plannedDaysPart1.reverse(), endoDay, ...oftalmoDays, ...orlDays, ...tyoBlock, ...mainAndCardioBlock, ...vaccineBlock ];
@@ -494,10 +495,11 @@
             // 2.5. Rellenar días vacíos y ordenar
             const finalMap = new Map();
             finalPlannedDays.forEach(day => {
-                if (!finalMap.has(day.date)) {
+                if (!finalMap.has(day.date) || (day.blocks && day.blocks.length > 0 && day.blocks.some(b => b.topics && b.topics.length > 0))) {
                    finalMap.set(day.date, day);
                 }
             });
+
             let lastPlannedDate = new Date(Array.from(finalMap.keys()).reduce((max, date) => date > max ? date : max, '2000-01-01'));
             let finalCalendarDate = new Date('2025-09-30');
             
