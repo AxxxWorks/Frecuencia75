@@ -257,7 +257,7 @@
         let countdownTargetDateStr;
         let countdownInterval = null;
         const ALL_TASK_IDS = ['task-1-1', 'task-1-2', 'task-1-3', 'task-2-1', 'task-2-2', 'task-3-1', 'task-4-1', 'task-5-1', 'task-5-2', 'task-6-1'];
-        const PLAN_VERSION = 9; // Se incrementa la versión para forzar la regeneración del plan modificado
+        const PLAN_VERSION = 10; // Se incrementa la versión para forzar la regeneración del plan modificado
         
         let calendarView, boardView, viewSwitcher, calendarContainer, todoContainer, inprogressContainer, doneContainer;
         let dayModal, dayModalOverlay, dayModalTitle, dayModalTopicsContainer, dayModalNotes, saveNoteButton;
@@ -402,7 +402,6 @@
         function recalculateFirstOfSubjectFlags(plan) {
             const subjectsFound = new Set();
             plan.forEach(day => {
-                // Procesa la nueva estructura de `day.topicsList`
                 if (day.topicsList) {
                     day.topicsList.forEach(topic => {
                         if(topic.structureType === 'object') {
@@ -415,7 +414,6 @@
                         }
                     });
                 }
-                 // Mantiene la lógica antigua para `day.blocks`
                 if (day.blocks) {
                      day.blocks.forEach(block => {
                         subjectsFound.add(block.subject);
@@ -449,30 +447,87 @@
             const oftalmoDays = [ { date: "2025-06-30", blocks: [ { subject: "OFTALMOLOGÍA", topics: ["Blefaritis", "Orzuelo", "Conjuntivitis (alergica, bacteriana, neonatal, viral)", "Chalazión", "Glaucoma de ángulo abierto", "Glaucoma de ángulo cerrado", "Glaucoma congénito"] } ] }, { date: "2025-07-01", blocks: [ { subject: "OFTALMOLOGÍA", topics: ["Degeneración macular", "Desprendimiento de retina", "Retinopatía diabética", "Retinopatía hipertensiva", "Catarata", "Trauma ocular", "Ojo rojo"] } ] } ];
             const orlDays = [ { date: "2025-07-02", blocks: [ { subject: "ORL", topics: ["Epistaxis", "VPPB", "Parálisis de Bell", "Neuralgia de trigémino", "Neuritis vestibular", "Fracturas nasales"] } ] }, { date: "2025-07-03", blocks: [ { subject: "ORL", topics: ["Rinosinusitis", "Faringoamigdalitis", "Angina de Ludwig", "Otitis", "Mastoiditis aguda"] } ] } ];
             
-            // Parte 2: Temas de Julio en adelante (nueva estructura de datos)
-            const manualSchedule = [
-                // TYO
-                { date: '2025-07-10', subject: 'TYO', topics: ["Osteoartritis", "Osteomielitis", "Osteosarcoma", "Sarcoma de Ewing"] },
-                { date: '2025-07-11', subject: 'TYO', topics: ["Tumores óseos malignos", "Embolia grasa", "Costilla cervical", "Esguince cervical"] },
-                { date: '2025-07-12', subject: 'TYO', topics: ["Lumbalgia", "Hernia de disco", "Túnel del carpo", "Síndrome de hombro doloroso"] },
-                { date: '2025-07-13', subject: 'TYO', topics: ["Fractura de clavícula", "Fractura de húmero proximal", "Luxación glenohumeral", "Luxación de codo"] },
-                { date: '2025-07-14', subject: 'TYO', topics: ["Codo de niñera", "Fracturas de codo", "Fracturas de antebrazo", "Fractura de radio distal"] },
-                { date: '2025-07-15', subject: 'TYO', topics: ["Lesiones fisiarias", "Fracturas expuestas", "Fractura de cadera", "Epifisiolistesis femoral"] },
-                { date: '2025-07-16', subject: 'TYO', topics: ["Legg Calvé Perthes", "Luxación coxofemoral", "Lesiones de rodilla", "Fractura de diáfisis de tibia"] },
-                { date: '2025-07-17', subject: 'TYO', topics: ["Esguince de tobillo", "Fractura de tobillo", "Rotura de talón de Aquiles"] },
-                { date: '2025-07-18', subject: 'TYO', topics: ["Pie equino varo", "Pie plano"] },
-                 // A PARTIR DE AQUI SE ELIMINA TODO
+            // Parte 2: Temas de Julio en adelante (nueva estructura de datos, plan manual)
+            const manualScheduleData = [
+                { date: '2025-07-10', subject: 'TYO', topics: ["Osteoartritis", "Osteomielitis", "Osteosarcoma", "Sarcoma de Ewing", "Tumores óseos malignos"] },
+                { date: '2025-07-11', subject: 'TYO', topics: ["Embolia grasa", "Costilla cervical", "Esguince cervical", "Lumbalgia", "Hernia de disco"] },
+                { date: '2025-07-12', subject: 'TYO', topics: ["Túnel del carpo", "Síndrome de hombro doloroso", "Fractura de clavícula", "Fractura de húmero proximal"] },
+                { date: '2025-07-13', subject: 'TYO', topics: ["Luxación glenohumeral", "Luxación de codo", "Codo de niñera", "Fracturas de codo"] },
+                { date: '2025-07-14', subject: 'TYO', topics: ["Fracturas de antebrazo", "Fractura de radio distal", "Lesiones fisiarias", "Fracturas expuestas"] },
+                { date: '2025-07-15', subject: 'TYO', topics: ["Fractura de cadera", "Epifisiolistesis femoral", "Legg Calvé Perthes", "Luxación coxofemoral"] },
+                { date: '2025-07-16', subject: 'TYO', topics: ["Lesiones de rodilla", "Fractura de diáfisis de tibia", "Esguince de tobillo", "Fractura de tobillo"] },
+                { date: '2025-07-17', subject: 'TYO', topics: ["Rotura de talón de Aquiles", "Pie equino varo", "Pie plano"] },
+                { date: '2025-07-26', subject: 'CARDIOLOGÍA', topics: ['Fiebre reumática', 'Pericarditis', 'Endocarditis infecciosa', 'Infarto agudo de miocardio'] },
+                { date: '2025-07-27', subject: 'CARDIOLOGÍA', topics: ['Enfermedad coronaria', 'Disección aórtica', 'Aneurisma aórtico abdominal', 'Cor pulmonar crónico'] },
+                { date: '2025-07-28', subject: 'CARDIOLOGÍA', topics: ['Edema pulmonar', 'Hipotensión ortostática', 'Rehabilitación cardíaca'] },
+                { date: '2025-07-29', subject: 'CARDIOLOGÍA', topics: ['Estenosis aórtica', 'Insuficiencia aórtica', 'Estenosis mitral', 'Insuficiencia mitral', 'Otras valvulopatías', 'Hipertensión arterial sistémica', 'Crisis hipertensivas'] },
+                { date: '2025-07-30', subject: 'CARDIOLOGÍA', topics: ['Hipertensión pulmonar', 'Insuficiencia cardíaca aguda', 'Insuficiencia cardíaca crónica'] },
+                { date: '2025-07-30', subject: 'ANGIOLOGÍA', topics: ['Enfermedad arterial periférica', 'Insuficiencia venosa', 'Pie diabético', 'Trombosis venosa profunda', 'Tromboembolia pulmonar'] },
+                { date: '2025-07-31', subject: 'ANGIOLOGÍA', topics: ['Paget Schroetter', 'Tromboembolia venosa en obstetricia', 'Úlceras por presión'] },
+                { date: '2025-07-31', subject: 'ACLS', topics: ['Soporte vital básico', 'RCP', 'Taquicardia ACLS', 'Taquicardia supraventricular'] },
+                { date: '2025-08-01', subject: 'ACLS', topics: ['Bloqueos AV', 'Bradicardia', 'Fibrilación auricular', 'Fibrilación ventricular', 'Síndrome de WPW', 'PLS', 'Ahogamiento'] },
+                { date: '2025-08-02', subject: 'ATLS', topics: ['Politrauma', 'Tipos de shock', 'Choque hipovolémico', 'Shock neurogénico', 'TCE adultos', 'TCE pediátrico', 'Fracturas de cráneo'] },
+                { date: '2025-08-03', subject: 'ATLS', topics: ['Trauma torácico', 'Hemotórax', 'Neumotórax a tensión', 'Neumotórax abierto', 'Neumotórax simple', 'Taponamiento cardíaco', 'Lesión traqueobronquial'] },
+                { date: '2025-08-04', subject: 'ATLS', topics: ['Trauma abdominal', 'Ruptura diafragmática', 'Trauma esplénico', 'Trauma espinal', 'Trauma pélvico', 'Trauma obstétrico', 'Quemaduras', 'Gran quemado', 'Catéter venoso central', 'Hipotermia'] },
+                { date: '2025-08-05', subject: 'TOXICOLOGÍA', topics: ['Manejo de intoxicaciones', 'Toxíndromes', 'Intoxicación por benzodiacepinas', 'Intoxicación por organofosforados', 'Intoxicación por paracetamol', 'Intoxicación por salicilatos'] },
+                { date: '2025-08-06', subject: 'TOXICOLOGÍA', topics: ['Intoxicación por etanol', 'Intoxicación por monóxido de carbono', 'Intoxicación por opiáceos', 'Intoxicación por anfetaminas', 'Intoxicación por fentanilo', 'Intoxicación por DMT'] },
+                { date: '2025-08-07', subject: 'TOXICOLOGÍA', topics: ['Intoxicación por hidrocarburos', 'Intoxicación por metales pesados', 'Intoxicación por plomo', 'Intoxicación por alcoholes', 'Ingesta de cáusticos', 'Intoxicación alimentaria'] },
+                { date: '2025-08-08', subject: 'TOXICOLOGÍA', topics: ['Anafilaxia', 'Picadura de alacrán', 'Mordedura de serpiente', 'Lactrodectus', 'Loxosceles', 'Picadura de himenópteros', 'Golpe de calor'] },
+                { date: '2025-08-09', subject: 'GASTROENTEROLOGÍA', topics: ['Reflujo ERGE', 'Enfermedad ácido péptica', 'Síndrome de intestino irritable', 'Dispepsia funcional', 'Mallory Weiss', 'Zollinger Ellison', 'Acalasia'] },
+                { date: '2025-08-10', subject: 'GASTROENTEROLOGÍA', topics: ['Esófago de Barrett', 'Enfermedad celíaca', 'Enfermedad de Crohn', 'Colitis ulcerativa', 'Enfermedad diverticular', 'Sangrado TDA', 'Sangrado TDB'] },
+                { date: '2025-08-11', subject: 'GASTROENTEROLOGÍA', topics: ['Varices esofágicas', 'EHGNA', 'Hepatitis A', 'Hepatitis B', 'Hepatitis C', 'Hepatitis autoinmune'] },
+                { date: '2025-08-12', subject: 'GASTROENTEROLOGÍA', topics: ['Absceso hepático amebiano', 'Absceso hepático piógeno', 'Cirrosis hepática', 'Insuficiencia hepática', 'Ascitis', 'Encefalopatía hepática'] },
+                { date: '2025-08-13', subject: 'GASTROENTEROLOGÍA', topics: ['Pancreatitis aguda', 'Pancreatitis crónica', 'Cáncer gástrico', 'Cáncer de esófago', 'Cáncer de páncreas', 'Carcinoma hepatocelular'] },
+                { date: '2025-08-14', subject: 'CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA', topics: ['Apendicitis aguda', 'Apendicitis en el embarazo', 'Hernias', 'Hernia inguinal', 'Hernia femoral', 'Hernia hiatal', 'Hernia umbilical'] },
+                { date: '2025-08-15', subject: 'CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA', topics: ['Hernia ventral', 'Colecistitis aguda', 'Colelitiasis', 'Coledocolitiasis', 'Colangitis aguda', 'Oclusión intestinal', 'Isquemia intestinal'] },
+                { date: '2025-08-16', subject: 'CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA', topics: ['Vólvulo de sigmoides', 'Vólvulo de ciego', 'Enfermedad hemorroidal', 'Fístula anal', 'Fisura anal', 'Absceso anal', 'Quiste pilonidal'] },
+                { date: '2025-08-17', subject: 'CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA', topics: ['Cáncer colorrectal', 'Poliposis adenomatosa familiar PAF', 'Fístulas biliointestinales', 'Colangiocarcinoma', 'Complicaciones post Qx', 'Heridas quirúrgicas'] },
+                { date: '2025-08-18', subject: 'CIRUGÍA PEDIÁTRICA', topics: ['Atresia esofágica', 'Atresia duodenal', 'Atresia yeyunoileal', 'Atresia biliar', 'Atresia de coanas', 'Estenosis pilórica'] },
+                { date: '2025-08-19', subject: 'CIRUGÍA PEDIÁTRICA', topics: ['Hernia diafragmática congénita', 'Malrotación intestinal', 'Invaginación intestinal', 'Divertículo de Meckel', 'Hirschsprung', 'Enfermedad de Hirschsprung'] },
+                { date: '2025-08-20', subject: 'CIRUGÍA PEDIÁTRICA', topics: ['Patología umbilical', 'Criptorquidia', 'Espina bífida', 'Malformaciones rectales', 'Retinoblastoma', 'Nefroblastoma', 'Neuroblastoma', 'Tumor abdominal'] },
+                { date: '2025-08-21', subject: 'GINECOLOGÍA', topics: ['Amenorreas primarias', 'Amenorreas secundarias', 'Sangrado uterino anormal', 'Dismenorrea aguda', 'Adenomiosis', 'Endometriosis', 'Miomatosis uterina'] },
+                { date: '2025-08-22', subject: 'GINECOLOGÍA', topics: ['Hiperplasia endometrial', 'Quiste de ovario benigno', 'Torsión ovárica', 'Ovario poliquístico', 'Enfermedad pélvica inflamatoria', 'Hidrosalpinx', 'Fitz-Hugh-Curtis'] },
+                { date: '2025-08-23', subject: 'GINECOLOGÍA', topics: ['Vaginitis bacteriana', 'Vaginitis infecciosa', 'Tricomoniasis', 'Bartolinitis', 'Candidiasis vulvovaginal', 'Chlamydia', 'Mastitis'] },
+                { date: '2025-08-24', subject: 'GINECOLOGÍA', topics: ['Mastopatía fibroquística', 'Fibroadenoma', 'Papiloma intraductal', 'Quiste mamario', 'Patología mamaria benigna', 'Osteoporosis post menopausia', 'Menopausia y climaterio'] },
+                { date: '2025-08-25', subject: 'GINECOLOGÍA', topics: ['Insuficiencia ovárica primaria', 'Anticonceptivos generalidades', 'Anticonceptivos GPC', 'Anticonceptivos hormonales combinados', 'Anticoncepción de emergencia', 'DIU de cobre'] },
+                { date: '2025-08-26', subject: 'GINECOLOGÍA', topics: ['DIU de levonorgestrel', 'Implante subdérmico', 'Progestágenos solos', 'Lactancia como anticonceptivo', 'Condón', 'Vasectomía', 'Oclusión tubaria bilateral OTB', 'Infertilidad', 'Cistocele e incontinencia'] },
+                { date: '2025-08-27', subject: 'ONCOGINE', topics: ['Tamizaje cáncer de mama', 'Cáncer de mama', 'Cáncer cérvicouterino', 'Cáncer de endometrio', 'Cáncer de ovario', 'Cáncer de vagina', 'Tumores anexiales'] },
+                { date: '2025-08-28', subject: 'OBSTETRICIA', topics: ['Control prenatal', 'Aloinmunización materna', 'Estática fetal', 'Tipos de pelvis', 'Atención del parto', 'Manejo activo del parto'] },
+                { date: '2025-08-29', subject: 'OBSTETRICIA', topics: ['Cesárea', 'Parto pretérmino', 'Puerperio fisiológico', 'Líquido amniótico', 'Ruptura prematura de membranas', 'Corioamnionitis', 'Distocias'] },
+                { date: '2025-08-30', subject: 'OBSTETRICIA', topics: ['Embarazo múltiple', 'Endometritis puerperal', 'Hiperémesis gravídica', 'Insuficiencia cervical', 'Muerte fetal', 'Enfermedades hipertensivas del embarazo'] },
+                { date: '2025-08-31', subject: 'OBSTETRICIA', topics: ['Preeclampsia sin datos de severidad', 'Síndrome de HELLP', 'Diabetes gestacional', 'IVU en el embarazo', 'Restricción del crecimiento intrauterino', 'Sepsis puerperal', 'Síndrome de Sheehan', 'Depresión posparto'] },
+                { date: '2025-09-01', subject: 'HEMORRAGIAS OBSTÉTRICAS', topics: ['Generalidades de hemorragias', 'Hemorragia postparto', 'Desgarro perineal', 'Amenaza de aborto', 'Aborto espontáneo', 'Acretismo placentario'] },
+                { date: '2025-09-02', subject: 'HEMORRAGIAS OBSTÉTRICAS', topics: ['Atonía uterina', 'Choque hemorrágico en obstetricia', 'Desprendimiento prematuro de placenta normoinserta', 'Embarazo ectópico', 'Placenta previa', 'Ruptura uterina', 'Vasa previa', 'Enfermedad trofoblástica gestacional'] },
+                { date: '2025-09-03', subject: 'NEONATOLOGÍA', topics: ['APGAR', 'Reanimación neonatal', 'Prematuro sano', 'Recién nacido de término', 'Apnea del prematuro', 'Asfixia neonatal'] },
+                { date: '2025-09-04', subject: 'NEONATOLOGÍA', topics: ['Síndrome de dificultad respiratoria', 'Taquipnea transitoria del recién nacido', 'Síndrome de aspiración de meconio', 'Displasia broncopulmonar', 'Silverman Anderson', 'Maduración pulmonar'] },
+                { date: '2025-09-05', subject: 'NEONATOLOGÍA', topics: ['Encefalopatía hipóxica', 'Enfermedad hemorrágica del recién nacido', 'Enterocolitis necrotizante', 'Hipoacusia neonatal', 'Hipoglucemia neonatal', 'Ictericia neonatal'] },
+                { date: '2025-09-06', subject: 'NEONATOLOGÍA', topics: ['Muerte súbita del lactante', 'Sepsis neonatal', 'Tamiz neonatal', 'Lesiones de plexo braquial obstétrico', 'Lesiones extracraneales', 'Displasia del desarrollo de la cadera DDC'] },
+                { date: '2025-09-07', subject: 'CONGÉNITAS', topics: ['Cardiopatías congénitas', 'Tetralogía de Fallot', 'Coartación aórtica', 'Persistencia del conducto arterioso', 'Fibrosis quística', 'Fenilcetonuria', 'Galactosemia clásica'] },
+                { date: '2025-09-08', subject: 'CONGÉNITAS', topics: ['STORCH', 'STORCH Citomegalovirus', 'STORCH Herpes simple', 'STORCH Rubéola congénita', 'STORCH Sífilis congénita', 'STORCH Toxoplasmosis', 'STORCH Varicela congénita'] },
+                { date: '2025-09-09', subject: 'ESCOLAR', topics: ['Control de niño sano', 'Etapas del crecimiento', 'Talla baja', 'Alergia alimentaria', 'Cuerpo extraño', 'Dermatitis del pañal', 'Estreñimiento funcional'] },
+                { date: '2025-09-10', subject: 'ESCOLAR', topics: ['Hiperplasia adrenal congénita', 'Hipotiroidismo congénito', 'Maltrato infantil', 'Mucopolisacaridosis', 'Reflujo gastroesofágico del lactante'] },
+                { date: '2025-09-11', subject: 'NUTRICIÓN PEDIÁTRICA', topics: ['Lactancia materna', 'Alimentación complementaria', 'Desnutrición pediátrica', 'Deficiencia de vitamina A', 'Hipovitaminosis', 'Raquitismo carencial'] },
+                { date: '2025-09-12', subject: 'NUTRICIÓN PEDIÁTRICA', topics: ['Pelagra en niños', 'Intolerancia a la lactosa', 'Obesidad en escolares', 'Síndrome metabólico en niños'] },
+                { date: '2025-09-13', subject: 'INFECTOLOGÍA PEDIÁTRICA', topics: ['Adenitis mesentérica', 'Onfalitis', 'Exantemáticas Diferencial', 'Eritema infeccioso', 'Escarlatina', 'Exantema súbito', 'Enfermedad de Kawasaki'] },
+                { date: '2025-09-14', subject: 'INFECTOLOGÍA PEDIÁTRICA', topics: ['Síndrome mano pie boca', 'Rubéola', 'Sarampión', 'Varicela', 'Parotiditis', 'Bronquiolitis', 'Epiglotitis'] },
+                { date: '2025-09-15', subject: 'INFECTOLOGÍA PEDIÁTRICA', topics: ['Laringotraqueitis CRUP', 'Mononucleosis infecciosa', 'Tos ferina', 'IVU en menores'] },
+                { date: '2025-09-16', subject: 'VACUNAS', topics: ['Vacunas generalidades', 'Tipos de vacunas', 'Vacunación universal', 'Aplicación de vacunas', 'Vacuna para personal de salud', 'Vacunas en el embarazo'] },
+                { date: '2025-09-17', subject: 'VACUNAS', topics: ['Esquema de vacunación', 'BCG', 'Hepatitis A', 'Hepatitis B', 'Hexavalente', 'Influenza'] },
+                { date: '2025-09-18', subject: 'VACUNAS', topics: ['Neumocócica', 'Rotavirus', 'Sabin', 'Salmonella', 'DPT'] },
+                { date: '2025-09-19', subject: 'VACUNAS', topics: ['SRP', 'Tétanos', 'Varicela', 'VPH'] },
+                { date: '2025-09-20', subject: 'VACUNAS', topics: ["Temario completado."] },
             ];
             
             let planDays = new Map();
-             manualSchedule.forEach(dayInfo => {
+            manualScheduleData.forEach(dayInfo => {
                 const dateStr = dayInfo.date;
+                let subject = dayInfo.subject === "CARDIOLOGÍA II" ? "CARDIOLOGÍA" : dayInfo.subject;
                 if (!planDays.has(dateStr)) {
                     planDays.set(dateStr, { date: dateStr, topicsList: [] });
                 }
                 const dayTopics = dayInfo.topics.map(topicName => ({
                     topicName: topicName,
-                    subject: dayInfo.subject,
+                    subject: subject,
                     isFirstOfSubject: false, // Se recalculará después
                     structureType: 'object'
                 }));
@@ -485,7 +540,13 @@
             let finalPlannedDays = [ ...plannedDaysPart1.reverse(), endoDay, ...oftalmoDays, ...orlDays, ...scheduledDaysPart2 ];
             
             const finalMap = new Map();
-            finalPlannedDays.forEach(day => { finalMap.set(day.date, {...finalMap.get(day.date), ...day}); });
+            finalPlannedDays.forEach(day => {
+                const existingDay = finalMap.get(day.date) || { date: day.date, blocks: [], topicsList: [] };
+                if (day.blocks) existingDay.blocks.push(...day.blocks);
+                if (day.topicsList) existingDay.topicsList.push(...day.topicsList);
+                finalMap.set(day.date, existingDay);
+            });
+
             let lastPlannedDate = new Date(Array.from(finalMap.keys()).reduce((max, date) => date > max ? date : max, '2000-01-01'));
             let finalCalendarDate = new Date('2025-09-30');
             while(lastPlannedDate < finalCalendarDate) {
