@@ -257,7 +257,7 @@
         let countdownTargetDateStr;
         let countdownInterval = null;
         const ALL_TASK_IDS = ['task-1-1', 'task-1-2', 'task-1-3', 'task-2-1', 'task-2-2', 'task-3-1', 'task-4-1', 'task-5-1', 'task-5-2', 'task-6-1'];
-        const PLAN_VERSION = 8; // Se incrementa la versión para forzar la regeneración del plan modificado
+        const PLAN_VERSION = 9; // Se incrementa la versión para forzar la regeneración del plan modificado
         
         let calendarView, boardView, viewSwitcher, calendarContainer, todoContainer, inprogressContainer, doneContainer;
         let dayModal, dayModalOverlay, dayModalTitle, dayModalTopicsContainer, dayModalNotes, saveNoteButton;
@@ -405,11 +405,13 @@
                 // Procesa la nueva estructura de `day.topicsList`
                 if (day.topicsList) {
                     day.topicsList.forEach(topic => {
-                        if (subjectsFound.has(topic.subject)) {
-                            topic.isFirstOfSubject = false;
-                        } else {
-                            topic.isFirstOfSubject = true;
-                            subjectsFound.add(topic.subject);
+                        if(topic.structureType === 'object') {
+                            if (subjectsFound.has(topic.subject)) {
+                                topic.isFirstOfSubject = false;
+                            } else {
+                                topic.isFirstOfSubject = true;
+                                subjectsFound.add(topic.subject);
+                            }
                         }
                     });
                 }
@@ -448,68 +450,36 @@
             const orlDays = [ { date: "2025-07-02", blocks: [ { subject: "ORL", topics: ["Epistaxis", "VPPB", "Parálisis de Bell", "Neuralgia de trigémino", "Neuritis vestibular", "Fracturas nasales"] } ] }, { date: "2025-07-03", blocks: [ { subject: "ORL", topics: ["Rinosinusitis", "Faringoamigdalitis", "Angina de Ludwig", "Otitis", "Mastoiditis aguda"] } ] } ];
             
             // Parte 2: Temas de Julio en adelante (nueva estructura de datos)
-            const allNewTopicsBySpecialty = { 
-                "TYO": ["Osteoartritis", "Osteomielitis", "Osteosarcoma", "Sarcoma de Ewing", "Tumores óseos malignos", "Embolia grasa", "Costilla cervical", "Esguince cervical", "Lumbalgia", "Hernia de disco", "Túnel del carpo", "Síndrome de hombro doloroso", "Fractura de clavícula", "Fractura de húmero proximal", "Luxación glenohumeral", "Luxación de codo", "Codo de niñera", "Fracturas de codo", "Fracturas de antebrazo", "Fractura de radio distal", "Lesiones fisiarias", "Fracturas expuestas", "Fractura de cadera", "Epifisiolistesis femoral", "Legg Calvé Perthes", "Luxación coxofemoral", "Lesiones de rodilla", "Fractura de diáfisis de tibia", "Esguince de tobillo", "Fractura de tobillo", "Rotura de talón de Aquiles", "Pie equino varo", "Pie plano"], "CARDIOLOGÍA": ["Fiebre reumática", "Estenosis aórtica", "Insuficiencia aórtica", "Estenosis mitral", "Insuficiencia mitral", "Otras valvulopatías", "Pericarditis", "Endocarditis infecciosa", "Infarto agudo de miocardio", "Enfermedad coronaria", "Disección aórtica", "Aneurisma aórtico abdominal", "Cor pulmonar crónico", "Hipertensión arterial sistémica", "Crisis hipertensivas", "Hipertensión pulmonar", "Insuficiencia cardíaca aguda", "Insuficiencia cardíaca crónica", "Edema pulmonar", "Hipotensión ortostática", "Rehabilitación cardíaca"], "ANGIOLOGÍA": ["Enfermedad arterial periférica", "Insuficiencia venosa", "Pie diabético", "Trombosis venosa profunda", "Tromboembolia pulmonar", "Paget Schroetter", "Tromboembolia venosa en obstetricia", "Úlceras por presión"], "ACLS": ["Soporte vital básico", "RCP", "Taquicardia ACLS", "Taquicardia supraventricular", "Bloqueos AV", "Bradicardia", "Fibrilación auricular", "Fibrilación ventricular", "Síndrome de WPW", "PLS", "Ahogamiento"], "ATLS": ["Politrauma", "Tipos de shock", "Choque hipovolémico", "Shock neurogénico", "TCE adultos", "TCE pediátrico", "Fracturas de cráneo", "Trauma torácico", "Hemotórax", "Neumotórax a tensión", "Neumotórax abierto", "Neumotórax simple", "Taponamiento cardíaco", "Lesión traqueobronquial", "Trauma abdominal", "Ruptura diafragmática", "Trauma esplénico", "Trauma espinal", "Trauma pélvico", "Trauma obstétrico", "Quemaduras", "Gran quemado", "Catéter venoso central", "Hipotermia"], "TOXICOLOGÍA": ["Manejo de intoxicaciones", "Toxíndromes", "Intoxicación por benzodiacepinas", "Intoxicación por organofosforados", "Intoxicación por paracetamol", "Intoxicación por salicilatos", "Intoxicación por etanol", "Intoxicación por monóxido de carbono", "Intoxicación por opiáceos", "Intoxicación por anfetaminas", "Intoxicación por fentanilo", "Intoxicación por DMT", "Intoxicación por hidrocarburos", "Intoxicación por metales pesados", "Intoxicación por plomo", "Intoxicación por alcoholes", "Ingesta de cáusticos", "Intoxicación alimentaria", "Anafilaxia", "Picadura de alacrán", "Mordedura de serpiente", "Lactrodectus", "Loxosceles", "Picadura de himenópteros", "Golpe de calor"], "GASTROENTEROLOGÍA": ["Reflujo ERGE", "Enfermedad ácido péptica", "Síndrome de intestino irritable", "Dispepsia funcional", "Mallory Weiss", "Zollinger Ellison", "Acalasia", "Esófago de Barrett", "Enfermedad celíaca", "Enfermedad de Crohn", "Colitis ulcerativa", "Enfermedad diverticular", "Sangrado TDA", "Sangrado TDB", "Varices esofágicas", "EHGNA", "Hepatitis A", "Hepatitis B", "Hepatitis C", "Hepatitis autoinmune", "Absceso hepático amebiano", "Absceso hepático piógeno", "Cirrosis hepática", "Insuficiencia hepática", "Ascitis", "Encefalopatía hepática", "Pancreatitis aguda", "Pancreatitis crónica", "Cáncer gástrico", "Cáncer de esófago", "Cáncer de páncreas", "Carcinoma hepatocelular"], "CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA": ["Apendicitis aguda", "Apendicitis en el embarazo", "Hernias", "Hernia inguinal", "Hernia femoral", "Hernia hiatal", "Hernia umbilical", "Hernia ventral", "Colecistitis aguda", "Colelitiasis", "Coledocolitiasis", "Colangitis aguda", "Oclusión intestinal", "Isquemia intestinal", "Vólvulo de sigmoides", "Vólvulo de ciego", "Enfermedad hemorroidal", "Fístula anal", "Fisura anal", "Absceso anal", "Quiste pilonidal", "Cáncer colorrectal", "Poliposis adenomatosa familiar PAF", "Fístulas biliointestinales", "Colangiocarcinoma", "Complicaciones post Qx", "Heridas quirúrgicas"], "CIRUGÍA PEDIÁTRICA": ["Atresia esofágica", "Atresia duodenal", "Atresia yeyunoileal", "Atresia biliar", "Atresia de coanas", "Estenosis pilórica", "Hernia diafragmática congénita", "Malrotación intestinal", "Invaginación intestinal", "Divertículo de Meckel", "Hirschsprung", "Enfermedad de Hirschsprung", "Patología umbilical", "Criptorquidia", "Espina bífida", "Malformaciones rectales", "Retinoblastoma", "Nefroblastoma", "Neuroblastoma", "Tumor abdominal"], "GINECOLOGÍA": ["Amenorreas primarias", "Amenorreas secundarias", "Sangrado uterino anormal", "Dismenorrea aguda", "Adenomiosis", "Endometriosis", "Miomatosis uterina", "Hiperplasia endometrial", "Quiste de ovario benigno", "Torsión ovárica", "Ovario poliquístico", "Enfermedad pélvica inflamatoria", "Hidrosalpinx", "Fitz-Hugh-Curtis", "Vaginitis bacteriana", "Vaginitis infecciosa", "Tricomoniasis", "Bartolinitis", "Candidiasis vulvovaginal", "Chlamydia", "Mastitis", "Mastopatía fibroquística", "Fibroadenoma", "Papiloma intraductal", "Quiste mamario", "Patología mamaria benigna", "Osteoporosis post menopausia", "Menopausia y climaterio", "Insuficiencia ovárica primaria", "Anticonceptivos generalidades", "Anticonceptivos GPC", "Anticonceptivos hormonales combinados", "Anticoncepción de emergencia", "DIU de cobre", "DIU de levonorgestrel", "Implante subdérmico", "Progestágenos solos", "Lactancia como anticonceptivo", "Condón", "Vasectomía", "Oclusión tubaria bilateral OTB", "Infertilidad", "Cistocele e incontinencia"], "ONCOGINE": ["Tamizaje cáncer de mama", "Cáncer de mama", "Cáncer cérvicouterino", "Cáncer de endometrio", "Cáncer de ovario", "Cáncer de vagina", "Tumores anexiales"], "OBSTETRICIA": ["Control prenatal", "Aloinmunización materna", "Estática fetal", "Tipos de pelvis", "Atención del parto", "Manejo activo del parto", "Cesárea", "Parto pretérmino", "Puerperio fisiológico", "Líquido amniótico", "Ruptura prematura de membranas", "Corioamnionitis", "Distocias", "Embarazo múltiple", "Endometritis puerperal", "Hiperémesis gravídica", "Insuficiencia cervical", "Muerte fetal", "Enfermedades hipertensivas del embarazo", "Preeclampsia sin datos de severidad", "Síndrome de HELLP", "Diabetes gestacional", "IVU en el embarazo", "Restricción del crecimiento intrauterino", "Sepsis puerperal", "Síndrome de Sheehan", "Depresión posparto"], "HEMORRAGIAS OBSTÉTRICAS": ["Generalidades de hemorragias", "Hemorragia postparto", "Desgarro perineal", "Amenaza de aborto", "Aborto espontáneo", "Acretismo placentario", "Atonía uterina", "Choque hemorrágico en obstetricia", "Desprendimiento prematuro de placenta normoinserta", "Embarazo ectópico", "Placenta previa", "Ruptura uterina", "Vasa previa", "Enfermedad trofoblástica gestacional"], "NEONATOLOGÍA": ["APGAR", "Reanimación neonatal", "Prematuro sano", "Recién nacido de término", "Apnea del prematuro", "Asfixia neonatal", "Síndrome de dificultad respiratoria", "Taquipnea transitoria del recién nacido", "Síndrome de aspiración de meconio", "Displasia broncopulmonar", "Silverman Anderson", "Maduración pulmonar", "Encefalopatía hipóxica", "Enfermedad hemorrágica del recién nacido", "Enterocolitis necrotizante", "Hipoacusia neonatal", "Hipoglucemia neonatal", "Ictericia neonatal", "Muerte súbita del lactante", "Sepsis neonatal", "Tamiz neonatal", "Lesiones de plexo braquial obstétrico", "Lesiones extracraneales", "Displasia del desarrollo de la cadera DDC"], "CONGENITAS": ["Cardiopatías congénitas", "Tetralogía de Fallot", "Coartación aórtica", "Persistencia del conducto arterioso", "Fibrosis quística", "Fenilcetonuria", "Galactosemia clásica", "STORCH", "STORCH Citomegalovirus", "STORCH Herpes simple", "STORCH Rubéola congénita", "STORCH Sífilis congénita", "STORCH Toxoplasmosis", "STORCH Varicela congénita"], "ESCOLAR": ["Control de niño sano", "Etapas del crecimiento", "Talla baja", "Alergia alimentaria", "Cuerpo extraño", "Dermatitis del pañal", "Estreñimiento funcional", "Hiperplasia adrenal congénita", "Hipotiroidismo congénito", "Maltrato infantil", "Mucopolisacaridosis", "Reflujo gastroesofágico del lactante"], "NUTRICIÓN PEDIÁTRICA": ["Lactancia materna", "Alimentación complementaria", "Desnutrición pediátrica", "Deficiencia de vitamina A", "Hipovitaminosis", "Raquitismo carencial", "Pelagra en niños", "Intolerancia a la lactosa", "Obesidad en escolares", "Síndrome metabólico en niños"], "INFECTOLOGÍA PEDIÁTRICA": ["Adenitis mesentérica", "Onfalitis", "Exantemáticas Diferencial", "Eritema infeccioso", "Escarlatina", "Exantema súbito", "Enfermedad de Kawasaki", "Síndrome mano pie boca", "Rubéola", "Sarampión", "Varicela", "Parotiditis", "Bronquiolitis", "Epiglotitis", "Laringotraqueitis CRUP", "Mononucleosis infecciosa", "Tos ferina", "IVU en menores"], "VACUNAS": ["Vacunas generalidades", "Tipos de vacunas", "Vacunación universal", "Aplicación de vacunas", "Vacuna para personal de salud", "Vacunas en el embarazo", "Esquema de vacunación", "BCG", "Hepatitis A", "Hepatitis B", "Hexavalente", "Influenza", "Neumocócica", "Rotavirus", "Sabin", "Salmonella", "DPT", "SRP", "Tétanos", "Varicela", "VPH"] };
+            const manualSchedule = [
+                // TYO
+                { date: '2025-07-10', subject: 'TYO', topics: ["Osteoartritis", "Osteomielitis", "Osteosarcoma", "Sarcoma de Ewing"] },
+                { date: '2025-07-11', subject: 'TYO', topics: ["Tumores óseos malignos", "Embolia grasa", "Costilla cervical", "Esguince cervical"] },
+                { date: '2025-07-12', subject: 'TYO', topics: ["Lumbalgia", "Hernia de disco", "Túnel del carpo", "Síndrome de hombro doloroso"] },
+                { date: '2025-07-13', subject: 'TYO', topics: ["Fractura de clavícula", "Fractura de húmero proximal", "Luxación glenohumeral", "Luxación de codo"] },
+                { date: '2025-07-14', subject: 'TYO', topics: ["Codo de niñera", "Fracturas de codo", "Fracturas de antebrazo", "Fractura de radio distal"] },
+                { date: '2025-07-15', subject: 'TYO', topics: ["Lesiones fisiarias", "Fracturas expuestas", "Fractura de cadera", "Epifisiolistesis femoral"] },
+                { date: '2025-07-16', subject: 'TYO', topics: ["Legg Calvé Perthes", "Luxación coxofemoral", "Lesiones de rodilla", "Fractura de diáfisis de tibia"] },
+                { date: '2025-07-17', subject: 'TYO', topics: ["Esguince de tobillo", "Fractura de tobillo", "Rotura de talón de Aquiles"] },
+                { date: '2025-07-18', subject: 'TYO', topics: ["Pie equino varo", "Pie plano"] },
+                 // A PARTIR DE AQUI SE ELIMINA TODO
+            ];
             
-            const newSpecialtyOrder = ["TYO", "CARDIOLOGÍA", "ANGIOLOGÍA", "ACLS", "ATLS", "TOXICOLOGÍA", "GASTROENTEROLOGÍA", "CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA", "CIRUGÍA PEDIÁTRICA", "GINECOLOGÍA", "ONCOGINE", "OBSTETRICIA", "HEMORRAGIAS OBSTÉTRICAS", "NEONATOLOGÍA", "CONGENITAS", "ESCOLAR", "NUTRICIÓN PEDIÁTRICA", "INFECTOLOGÍA PEDIÁTRICA", "VACUNAS"];
-            let flatTopicsList = [];
-            newSpecialtyOrder.forEach(specialty => {
-                const topics = allNewTopicsBySpecialty[specialty];
-                if(topics && topics.length > 0) {
-                    topics.forEach((topic, index) => {
-                        flatTopicsList.push({
-                            topicName: topic,
-                            subject: specialty,
-                            isFirstOfSubject: index === 0, // El primer tema de cada especialidad se marca
-                            structureType: 'object' // Identificador para la nueva estructura
-                        });
-                    });
-                }
-            });
-
-            // Lógica de planificación para distribuir la flatTopicsList en días
-            let scheduledDaysPart2 = [];
             let planDays = new Map();
-
-            // Función para añadir temas a un día
-            const addTopicsToDay = (dateStr, topics) => {
+             manualSchedule.forEach(dayInfo => {
+                const dateStr = dayInfo.date;
                 if (!planDays.has(dateStr)) {
                     planDays.set(dateStr, { date: dateStr, topicsList: [] });
                 }
-                planDays.get(dateStr).topicsList.push(...topics);
-            };
+                const dayTopics = dayInfo.topics.map(topicName => ({
+                    topicName: topicName,
+                    subject: dayInfo.subject,
+                    isFirstOfSubject: false, // Se recalculará después
+                    structureType: 'object'
+                }));
+                planDays.get(dateStr).topicsList.push(...dayTopics);
+            });
 
-            // TYO se mantiene en su bloque
-            const tyoTopics = flatTopicsList.filter(t => t.subject === 'TYO');
-            const tyoStartDate = new Date('2025-07-10T00:00:00');
-            for(let i = 0; i < 10; i++) {
-                const date = new Date(tyoStartDate);
-                date.setDate(date.getDate() + i);
-                const topicsForDay = tyoTopics.slice(Math.ceil(tyoTopics.length / 10 * i), Math.ceil(tyoTopics.length / 10 * (i + 1)));
-                addTopicsToDay(date.toISOString().split('T')[0], topicsForDay);
-            }
-
-            // Cardiología en adelante
-            const mainTopics = flatTopicsList.filter(t => t.subject !== 'TYO' && t.subject !== 'VACUNAS');
-            const mainStartDate = new Date('2025-07-20T00:00:00');
-            const mainEndDate = new Date('2025-09-19T00:00:00');
-            const mainDaysCount = Math.round((mainEndDate - mainStartDate) / (1000 * 60 * 60 * 24)) + 1;
-            const topicsPerDay = Math.ceil(mainTopics.length / mainDaysCount);
-            
-            for (let i = 0; i < mainDaysCount; i++) {
-                const date = new Date(mainStartDate);
-                date.setDate(date.getDate() + i);
-                const topicsForDay = mainTopics.slice(i * topicsPerDay, (i + 1) * topicsPerDay);
-                if (topicsForDay.length > 0) {
-                    addTopicsToDay(date.toISOString().split('T')[0], topicsForDay);
-                }
-            }
-            
-            // Vacunas al final
-            const vaccineTopics = flatTopicsList.filter(t => t.subject === 'VACUNAS');
-            addTopicsToDay('2025-09-20', vaccineTopics);
-
-            scheduledDaysPart2 = Array.from(planDays.values());
+            const scheduledDaysPart2 = Array.from(planDays.values());
             
             // Combinar todo
             let finalPlannedDays = [ ...plannedDaysPart1.reverse(), endoDay, ...oftalmoDays, ...orlDays, ...scheduledDaysPart2 ];
