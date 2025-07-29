@@ -257,7 +257,7 @@
         let countdownTargetDateStr;
         let countdownInterval = null;
         const ALL_TASK_IDS = ['task-1-1', 'task-1-2', 'task-1-3', 'task-2-1', 'task-2-2', 'task-3-1', 'task-4-1', 'task-5-1', 'task-5-2', 'task-6-1'];
-        const PLAN_VERSION = 10; // Se incrementa la versión para forzar la regeneración del plan modificado
+        const PLAN_VERSION = 8; // Se incrementa la versión para forzar la regeneración del plan modificado
         
         let calendarView, boardView, viewSwitcher, calendarContainer, todoContainer, inprogressContainer, doneContainer;
         let dayModal, dayModalOverlay, dayModalTitle, dayModalTopicsContainer, dayModalNotes, saveNoteButton;
@@ -358,7 +358,7 @@
                     "Diabetes mellitus": {aciertos:12,reactivos:15}, "Prediabetes": {aciertos:15,reactivos:15}, "Diabetes en el adulto mayor": {aciertos:6,reactivos:9}, "Diabetes en pediatría": {aciertos:5,reactivos:9}, "Cetoacidosis diabética y EHH": {aciertos:13,reactivos:18}, "Hipoglucemia": {aciertos:6,reactivos:9}, "Enfermedad de Cushing / Síndrome de Cushing": {aciertos:0,reactivos:0}, "Hiperprolactinemia": {aciertos:0,reactivos:0}, "Acromegalia": {aciertos:0,reactivos:0}, "Feocromocitoma": {aciertos:0,reactivos:0}, "Hiperaldosteronismo": {aciertos:0,reactivos:0}, "Hiperparatiroidismo": {aciertos:0,reactivos:0}, "Neoplasia endocrina múltple": {aciertos:0,reactivos:0}, "Alopecia endocrina": {aciertos:0,reactivos:0} 
                 },
                 "ORL": { "Epistaxis": {aciertos: 8, reactivos: 9}, "VPPB": {aciertos: 9, reactivos: 9}, "Parálisis de Bell": {aciertos: 6, reactivos: 9}, "Neuralgia de trigémino": {aciertos: 1, reactivos: 14}, "Neuritis vestibular": {aciertos: 6, reactivos: 9}, "Fracturas nasales": {aciertos: 8, reactivos: 9}, "Rinosinusitis": {aciertos: 6, reactivos: 9}, "Faringoamigdalitis": {aciertos: 6, reactivos: 9}, "Angina de Ludwig": {aciertos: 6, reactivos: 9}, "Otitis": {aciertos: 7, reactivos: 9}, "Mastoiditis aguda": {aciertos: 5, reactivos: 9} },
-                "OFTALMOLOGÍA": { "Blefaritis": { aciertos: 5, reactivos: 9 }, "Orzuelo": { aciertos: 6, reactivos: 9 }, "Conjuntivitis (alergica, bacteriana, neonatal, viral)": { aciertos: 16, reactivos: 21 }, "Chalazión": { aciertos: 9, reactivos: 9 }, "Glaucoma de ángulo abierto": { aciertos: 3, reactivos: 9 }, "Glaucoma de ángulo cerrado": { aciertos: 5, reactivos: 9 }, "Glaucoma congénito": { aciertos: 8, reactivos: 9 }, "Degeneración macular": { aciertos: 0, reactivos: 0 }, "Desprendimiento de retina": { aciertos: 0, reactivos: 0 }, "Retinopatía diabética": { aciertos: 4, reactivos: 9 }, "Retinopatía hipertensiva": {aciertos: 5, reactivos: 9 }, "Catarata": { aciertos: 7, reactivos: 9 }, "Trauma ocular": { aciertos: 15, reactivos: 18 }, "Ojo rojo": { aciertos: 7, reactivos: 9 } },
+                "OFTALMOLOGÍA": { "Blefaritis": { aciertos: 5, reactivos: 9 }, "Orzuelo": { aciertos: 6, reactivos: 9 }, "Conjuntivitis (alergica, bacteriana, neonatal, viral)": { aciertos: 16, reactivos: 21 }, "Chalazión": { aciertos: 9, reactivos: 9 }, "Glaucoma de ángulo abierto": { aciertos: 3, reactivos: 9 }, "Glaucoma de ángulo cerrado": { aciertos: 5, reactivos: 9 }, "Glaucoma congénito": { aciertos: 8, reactivos: 9 }, "Degeneración macular": { aciertos: 0, reactivos: 0 }, "Desprendimiento de retina": { aciertos: 0, reactivos: 0 }, "Retinopatía diabética": { aciertos: 4, reactivos: 9 }, "Retinopatía hipertensiva": { aciertos: 5, reactivos: 9 }, "Catarata": { aciertos: 7, reactivos: 9 }, "Trauma ocular": { aciertos: 15, reactivos: 18 }, "Ojo rojo": { aciertos: 7, reactivos: 9 } },
                 "GENÉTICA": { "Síndrome de Down": {aciertos:0,reactivos:0}, "Síndrome de Klinefelter": {aciertos:0,reactivos:0}, "Síndrome de Turner": {aciertos:0,reactivos:0}, "Síndrome de Marfan": {aciertos:0,reactivos:0}, "Enfermedad de Wilson": {aciertos:0,reactivos:0}, "Síndrome de Dravet": {aciertos:0,reactivos:0}, "Síndrome de Lynch": {aciertos:0,reactivos:0}, "Síndrome de Peutz Jegher": {aciertos:0,reactivos:0}, "Von Hippel Lindau": {aciertos:0,reactivos:0} },
                 "GERIATRÍA": { "Valoración geriátrica": {aciertos:18,reactivos:21}, "Alzheimer": {aciertos:12,reactivos:15}, "Delirium": {aciertos:7,reactivos:15}, "Demencia vascular": {aciertos:8,reactivos:9}, "Deterioro cognitivo": {aciertos:15,reactivos:21}, "Insomnio en el adulto mayor": {aciertos:9,reactivos:9}, "Síndrome de caídas": {aciertos:7,reactivos:9}, "Síndrome de fragilidad": {aciertos:15,reactivos:21}, "Maltrato en el adulto mayor": {aciertos:8,reactivos:9}, "Colapso del cuidador": {aciertos:15,reactivos:21}, "Depresión mayor": {aciertos:9,reactivos:9} },
                 "PSIQUIATRÍA": { "Abuso de sustancias": {aciertos:11,reactivos:15}, "Abstinencia alcohólica": {aciertos:12,reactivos:12}, "Trastorno por alcohol": {aciertos:9,reactivos:15}, "Esquizofrenia": {aciertos:10,reactivos:15}, "Estrés post traumático": {aciertos:3,reactivos:9}, "Trastornos del sueño": {aciertos:10,reactivos:15}, "Intento de suicidio": {aciertos:8,reactivos:9}, "Tdah": {aciertos:8,reactivos:12}, "Trastorno bipolar": {aciertos:13,reactivos:15}, "Trastornos de ansiedad": {aciertos:10,reactivos:15}, "Trastornos de conducta alimentaria": {aciertos:13,reactivos:15}, "Consumo de mariguana": {aciertos:14,reactivos:15}, "Violencia contra la mujer": {aciertos:12,reactivos:15}, "Autismo": {aciertos:8,reactivos:9}, "Síndrome de Munchausen": {aciertos:8,reactivos:9}},
@@ -447,109 +447,44 @@
             const oftalmoDays = [ { date: "2025-06-30", blocks: [ { subject: "OFTALMOLOGÍA", topics: ["Blefaritis", "Orzuelo", "Conjuntivitis (alergica, bacteriana, neonatal, viral)", "Chalazión", "Glaucoma de ángulo abierto", "Glaucoma de ángulo cerrado", "Glaucoma congénito"] } ] }, { date: "2025-07-01", blocks: [ { subject: "OFTALMOLOGÍA", topics: ["Degeneración macular", "Desprendimiento de retina", "Retinopatía diabética", "Retinopatía hipertensiva", "Catarata", "Trauma ocular", "Ojo rojo"] } ] } ];
             const orlDays = [ { date: "2025-07-02", blocks: [ { subject: "ORL", topics: ["Epistaxis", "VPPB", "Parálisis de Bell", "Neuralgia de trigémino", "Neuritis vestibular", "Fracturas nasales"] } ] }, { date: "2025-07-03", blocks: [ { subject: "ORL", topics: ["Rinosinusitis", "Faringoamigdalitis", "Angina de Ludwig", "Otitis", "Mastoiditis aguda"] } ] } ];
             
-            // Parte 2: Temas de Julio en adelante (nueva estructura de datos, plan manual y dinámico)
-            const manualScheduleData = [
-                { date: '2025-07-10', subject: 'TYO', topics: ["Fractura de clavícula", "Fractura de húmero proximal", "Luxación glenohumeral", "Luxación de codo"] },
-                { date: '2025-07-13', subject: 'TYO', topics: ["Codo de niñera", "Fracturas de codo", "Fracturas de antebrazo", "Fractura de radio distal"] },
-                { date: '2025-07-14', subject: 'TYO', topics: ["Lesiones fisiarias", "Fracturas expuestas", "Fractura de cadera", "Epifisiolistesis femoral"] },
-                { date: '2025-07-15', subject: 'TYO', topics: ["Legg Calvé Perthes", "Luxación coxofemoral", "Lesiones de rodilla", "Fractura de diáfisis de tibia"] },
-                { date: '2025-07-16', subject: 'TYO', topics: ["Sarcoma de Ewing", "Esguince de tobillo", "Fractura de tobillo", "Rotura de talón de Aquiles"] },
-                { date: '2025-07-17', subject: 'TYO', topics: ["Costilla cervical", "Esguince cervical", "Pie equino varo", "Pie plano"] },
-                { date: '2025-07-18', subject: 'TYO', topics: ["Túnel del carpo", "Síndrome de hombro doloroso"] },
-                { date: '2025-07-26', subject: 'CARDIOLOGÍA', topics: ['Fiebre reumática', 'Pericarditis', 'Endocarditis infecciosa', 'Infarto agudo de miocardio'] },
-                { date: '2025-07-27', subject: 'CARDIOLOGÍA', topics: ['Enfermedad coronaria', 'Disección aórtica', 'Aneurisma aórtico abdominal', 'Cor pulmonar crónico'] },
-                { date: '2025-07-28', subject: 'CARDIOLOGÍA', topics: ['Edema pulmonar', 'Hipotensión ortostática', 'Rehabilitación cardíaca'] }
-            ];
-
-            const topicsToDistribute = {
-                'CARDIOLOGÍA': ["Estenosis aórtica", "Insuficiencia aórtica", "Estenosis mitral", "Insuficiencia mitral", "Otras valvulopatías", "Hipertensión arterial sistémica", "Crisis hipertensivas", "Hipertensión pulmonar", "Insuficiencia cardíaca aguda", "Insuficiencia cardíaca crónica"],
-                'ANGIOLOGÍA': ["Enfermedad arterial periférica", "Insuficiencia venosa", "Pie diabético", "Trombosis venosa profunda", "Tromboembolia pulmonar", "Paget Schroetter", "Tromboembolia venosa en obstetricia", "Úlceras por presión"],
-                'ACLS': ["Soporte vital básico", "RCP", "Taquicardia ACLS", "Taquicardia supraventricular", "Bloqueos AV", "Bradicardia", "Fibrilación auricular", "Fibrilación ventricular", "Síndrome de WPW", "PLS", "Ahogamiento"],
-                'ATLS': ["Politrauma", "Tipos de shock", "Choque hipovolémico", "Shock neurogénico", "TCE adultos", "TCE pediátrico", "Fracturas de cráneo", "Trauma torácico", "Hemotórax", "Neumotórax a tensión", "Neumotórax abierto", "Neumotórax simple", "Taponamiento cardíaco", "Lesión traqueobronquial", "Trauma abdominal", "Ruptura diafragmática", "Trauma esplénico", "Trauma espinal", "Trauma pélvico", "Trauma obstétrico", "Quemaduras", "Gran quemado", "Catéter venoso central", "Hipotermia"],
-                'TOXICOLOGÍA': ["Manejo de intoxicaciones", "Toxíndromes", "Intoxicación por benzodiacepinas", "Intoxicación por organofosforados", "Intoxicación por paracetamol", "Intoxicación por salicilatos", "Intoxicación por etanol", "Intoxicación por monóxido de carbono", "Intoxicación por opiáceos", "Intoxicación por anfetaminas", "Intoxicación por fentanilo", "Intoxicación por DMT", "Intoxicación por hidrocarburos", "Intoxicación por metales pesados", "Intoxicación por plomo", "Intoxicación por alcoholes", "Ingesta de cáusticos", "Intoxicación alimentaria", "Anafilaxia", "Picadura de alacrán", "Mordedura de serpiente", "Lactrodectus", "Loxosceles", "Picadura de himenópteros", "Golpe de calor"],
-                'GASTROENTEROLOGÍA': ["Reflujo ERGE", "Enfermedad ácido péptica", "Síndrome de intestino irritable", "Dispepsia funcional", "Mallory Weiss", "Zollinger Ellison", "Acalasia", "Esófago de Barrett", "Enfermedad celíaca", "Enfermedad de Crohn", "Colitis ulcerativa", "Enfermedad diverticular", "Sangrado TDA", "Sangrado TDB", "Varices esofágicas", "EHGNA", "Hepatitis A", "Hepatitis B", "Hepatitis C", "Hepatitis autoinmune", "Absceso hepático amebiano", "Absceso hepático piógeno", "Cirrosis hepática", "Insuficiencia hepática", "Ascitis", "Encefalopatía hepática", "Pancreatitis aguda", "Pancreatitis crónica", "Cáncer gástrico", "Cáncer de esófago", "Cáncer de páncreas", "Carcinoma hepatocelular"],
-                'CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA': ["Apendicitis aguda", "Apendicitis en el embarazo", "Hernias", "Hernia inguinal", "Hernia femoral", "Hernia hiatal", "Hernia umbilical", "Hernia ventral", "Colecistitis aguda", "Colelitiasis", "Coledocolitiasis", "Colangitis aguda", "Oclusión intestinal", "Isquemia intestinal", "Vólvulo de sigmoides", "Vólvulo de ciego", "Enfermedad hemorroidal", "Fístula anal", "Fisura anal", "Absceso anal", "Quiste pilonidal", "Cáncer colorrectal", "Poliposis adenomatosa familiar PAF", "Fístulas biliointestinales", "Colangiocarcinoma", "Complicaciones post Qx", "Heridas quirúrgicas"],
-                'CIRUGÍA PEDIÁTRICA': ["Atresia esofágica", "Atresia duodenal", "Atresia yeyunoileal", "Atresia biliar", "Atresia de coanas", "Estenosis pilórica", "Hernia diafragmática congénita", "Malrotación intestinal", "Invaginación intestinal", "Divertículo de Meckel", "Hirschsprung", "Enfermedad de Hirschsprung", "Patología umbilical", "Criptorquidia", "Espina bífida", "Malformaciones rectales", "Retinoblastoma", "Nefroblastoma", "Neuroblastoma", "Tumor abdominal"],
-                'GINECOLOGÍA': ["Amenorreas primarias", "Amenorreas secundarias", "Sangrado uterino anormal", "Dismenorrea aguda", "Adenomiosis", "Endometriosis", "Miomatosis uterina", "Hiperplasia endometrial", "Quiste de ovario benigno", "Torsión ovárica", "Ovario poliquístico", "Enfermedad pélvica inflamatoria", "Hidrosalpinx", "Fitz-Hugh-Curtis", "Vaginitis bacteriana", "Vaginitis infecciosa", "Tricomoniasis", "Bartolinitis", "Candidiasis vulvovaginal", "Chlamydia", "Mastitis", "Mastopatía fibroquística", "Fibroadenoma", "Papiloma intraductal", "Quiste mamario", "Patología mamaria benigna", "Osteoporosis post menopausia", "Menopausia y climaterio", "Insuficiencia ovárica primaria", "Anticonceptivos generalidades", "Anticonceptivos GPC", "Anticonceptivos hormonales combinados", "Anticoncepción de emergencia", "DIU de cobre", "DIU de levonorgestrel", "Implante subdérmico", "Progestágenos solos", "Lactancia como anticonceptivo", "Condón", "Vasectomía", "Oclusión tubaria bilateral OTB", "Infertilidad", "Cistocele e incontinencia"],
-                'ONCOGINE': ["Tamizaje cáncer de mama", "Cáncer de mama", "Cáncer cérvicouterino", "Cáncer de endometrio", "Cáncer de ovario", "Cáncer de vagina", "Tumores anexiales"],
-                'OBSTETRICIA': ["Control prenatal", "Aloinmunización materna", "Estática fetal", "Tipos de pelvis", "Atención del parto", "Manejo activo del parto", "Cesárea", "Parto pretérmino", "Puerperio fisiológico", "Líquido amniótico", "Ruptura prematura de membranas", "Corioamnionitis", "Distocias", "Embarazo múltiple", "Endometritis puerperal", "Hiperémesis gravídica", "Insuficiencia cervical", "Muerte fetal", "Enfermedades hipertensivas del embarazo", "Preeclampsia sin datos de severidad", "Síndrome de HELLP", "Diabetes gestacional", "IVU en el embarazo", "Restricción del crecimiento intrauterino", "Sepsis puerperal", "Síndrome de Sheehan", "Depresión posparto"],
-                'HEMORRAGIAS OBSTÉTRICAS': ["Generalidades de hemorragias", "Hemorragia postparto", "Desgarro perineal", "Amenaza de aborto", "Aborto espontáneo", "Acretismo placentario", "Atonía uterina", "Choque hemorrágico en obstetricia", "Desprendimiento prematuro de placenta normoinserta", "Embarazo ectópico", "Placenta previa", "Ruptura uterina", "Vasa previa", "Enfermedad trofoblástica gestacional"],
-                'NEONATOLOGÍA': ["APGAR", "Reanimación neonatal", "Prematuro sano", "Recién nacido de término", "Apnea del prematuro", "Asfixia neonatal", "Síndrome de dificultad respiratoria", "Taquipnea transitoria del recién nacido", "Síndrome de aspiración de meconio", "Displasia broncopulmonar", "Silverman Anderson", "Maduración pulmonar", "Encefalopatía hipóxica", "Enfermedad hemorrágica del recién nacido", "Enterocolitis necrotizante", "Hipoacusia neonatal", "Hipoglucemia neonatal", "Ictericia neonatal", "Muerte súbita del lactante", "Sepsis neonatal", "Tamiz neonatal", "Lesiones de plexo braquial obstétrico", "Lesiones extracraneales", "Displasia del desarrollo de la cadera DDC"],
-                'CONGÉNITAS': ["Cardiopatías congénitas", "Tetralogía de Fallot", "Coartación aórtica", "Persistencia del conducto arterioso", "Fibrosis quística", "Fenilcetonuria", "Galactosemia clásica", "STORCH", "STORCH Citomegalovirus", "STORCH Herpes simple", "STORCH Rubéola congénita", "STORCH Sífilis congénita", "STORCH Toxoplasmosis", "STORCH Varicela congénita"],
-                'ESCOLAR': ["Control de niño sano", "Etapas del crecimiento", "Talla baja", "Alergia alimentaria", "Cuerpo extraño", "Dermatitis del pañal", "Estreñimiento funcional", "Hiperplasia adrenal congénita", "Hipotiroidismo congénito", "Maltrato infantil", "Mucopolisacaridosis", "Reflujo gastroesofágico del lactante"],
-                'NUTRICIÓN PEDIÁTRICA': ["Lactancia materna", "Alimentación complementaria", "Desnutrición pediátrica", "Deficiencia de vitamina A", "Hipovitaminosis", "Raquitismo carencial", "Pelagra en niños", "Intolerancia a la lactosa", "Obesidad en escolares", "Síndrome metabólico en niños"],
-                'INFECTOLOGÍA PEDIÁTRICA': ["Adenitis mesentérica", "Onfalitis", "Exantemáticas Diferencial", "Eritema infeccioso", "Escarlatina", "Exantema súbito", "Enfermedad de Kawasaki", "Síndrome mano pie boca", "Rubéola", "Sarampión", "Varicela", "Parotiditis", "Bronquiolitis", "Epiglotitis", "Laringotraqueitis CRUP", "Mononucleosis infecciosa", "Tos ferina", "IVU en menores"],
-                'VACUNAS': ["Vacunas generalidades", "Tipos de vacunas", "Vacunación universal", "Aplicación de vacunas", "Vacuna para personal de salud", "Vacunas en el embarazo", "Esquema de vacunación", "BCG", "Hepatitis A", "Hepatitis B", "Hexavalente", "Influenza", "Neumocócica", "Rotavirus", "Sabin", "Salmonella", "DPT", "SRP", "Tétanos", "Varicela", "VPH"]
+            // Parte 2: Temas de Julio en adelante, ahora con la nueva estructura
+            const allNewTopicsBySpecialty = { 
+                "TYO": ["Osteoartritis", "Osteomielitis", "Osteosarcoma", "Sarcoma de Ewing", "Tumores óseos malignos", "Embolia grasa", "Costilla cervical", "Esguince cervical", "Lumbalgia", "Hernia de disco", "Túnel del carpo", "Síndrome de hombro doloroso", "Fractura de clavícula", "Fractura de húmero proximal", "Luxación glenohumeral", "Luxación de codo", "Codo de niñera", "Fracturas de codo", "Fracturas de antebrazo", "Fractura de radio distal", "Lesiones fisiarias", "Fracturas expuestas", "Fractura de cadera", "Epifisiolistesis femoral", "Legg Calvé Perthes", "Luxación coxofemoral", "Lesiones de rodilla", "Fractura de diáfisis de tibia", "Esguince de tobillo", "Fractura de tobillo", "Rotura de talón de Aquiles", "Pie equino varo", "Pie plano"]
             };
-
-            const specialtyOrder = ['CARDIOLOGÍA', 'ANGIOLOGÍA', 'ACLS', 'ATLS', 'TOXICOLOGÍA', 'GASTROENTEROLOGÍA', 'CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA', 'CIRUGÍA PEDIÁTRICA', 'GINECOLOGÍA', 'ONCOGINE', 'OBSTETRICIA', 'HEMORRAGIAS OBSTÉTRICAS', 'NEONATOLOGÍA', 'CONGÉNITAS', 'ESCOLAR', 'NUTRICIÓN PEDIÁTRICA', 'INFECTOLOGÍA PEDIÁTRICA', 'VACUNAS'];
-            let flatTopicsToDistribute = [];
-            specialtyOrder.forEach(specialty => {
-                const topics = topicsToDistribute[specialty];
-                if (topics && topics.length > 0) {
+            
+            const newSpecialtyOrder = ["TYO"];
+            let flatTopicsList = [];
+            newSpecialtyOrder.forEach(specialty => {
+                const topics = allNewTopicsBySpecialty[specialty];
+                if(topics && topics.length > 0) {
                     topics.forEach((topic, index) => {
-                        flatTopicsToDistribute.push({
-                            topicName: topic,
-                            subject: specialty,
-                            isFirstOfSubject: index === 0,
-                            structureType: 'object'
-                        });
+                        flatTopicsList.push({ topicName: topic, subject: specialty, isFirstOfSubject: index === 0, structureType: 'object' });
                     });
                 }
             });
 
             let planDays = new Map();
-             manualScheduleData.forEach(dayInfo => {
-                const dateStr = dayInfo.date;
+            const addTopicsToDay = (dateStr, topics) => {
                 if (!planDays.has(dateStr)) planDays.set(dateStr, { date: dateStr, topicsList: [] });
-                const dayTopics = dayInfo.topics.map(topicName => ({
-                    topicName: topicName,
-                    subject: dayInfo.subject,
-                    isFirstOfSubject: false, 
-                    structureType: 'object'
-                }));
-                planDays.get(dateStr).topicsList.push(...dayTopics);
-             });
-            
-             // Distribuir el resto de los temas
-            const otherTopics = flatTopicsToDistribute.filter(t => t.subject !== 'TYO' && t.subject !== 'VACUNAS');
-            const otherStartDate = new Date('2025-07-29T00:00:00');
-            const otherEndDate = new Date('2025-09-18T00:00:00');
-            const otherDaysCount = Math.round((otherEndDate - otherStartDate) / (1000 * 60 * 60 * 24)) + 1;
-            const topicsPerDay = Math.ceil(otherTopics.length / otherDaysCount);
-            
-            for (let i = 0; i < otherDaysCount; i++) {
-                const date = new Date(otherStartDate);
+                planDays.get(dateStr).topicsList.push(...topics);
+            };
+
+            const tyoTopics = flatTopicsList.filter(t => t.subject === 'TYO');
+            const tyoStartDate = new Date('2025-07-10T00:00:00');
+            const topicsPerDayTYO = Math.ceil(tyoTopics.length / 10);
+            for(let i = 0; i < 10; i++) {
+                const date = new Date(tyoStartDate);
                 date.setDate(date.getDate() + i);
-                const topicsForDay = otherTopics.slice(i * topicsPerDay, (i + 1) * topicsPerDay);
-                if (topicsForDay.length > 0) {
-                    const dateStr = date.toISOString().split('T')[0];
-                    if (!planDays.has(dateStr)) planDays.set(dateStr, { date: dateStr, topicsList: [] });
-                    planDays.get(dateStr).topicsList.push(...topicsForDay);
-                }
+                const topicsForDay = tyoTopics.slice(i * topicsPerDayTYO, (i + 1) * topicsPerDayTYO);
+                if(topicsForDay.length > 0) addTopicsToDay(date.toISOString().split('T')[0], topicsForDay);
             }
-
-            // Distribuir Vacunas
-            const vaccineTopics = flatTopicsToDistribute.filter(t => t.subject === 'VACUNAS');
-            const midIndex = Math.ceil(vaccineTopics.length / 2);
-            if (!planDays.has('2025-09-19')) planDays.set('2025-09-19', { date: '2025-09-19', topicsList: [] });
-            planDays.get('2025-09-19').topicsList.push(...vaccineTopics.slice(0, midIndex));
-            if (!planDays.has('2025-09-20')) planDays.set('2025-09-20', { date: '2025-09-20', topicsList: [] });
-            planDays.get('2025-09-20').topicsList.push(...vaccineTopics.slice(midIndex));
-
+            
             const scheduledDaysPart2 = Array.from(planDays.values());
             
-            // Combinar todo
             let finalPlannedDays = [ ...plannedDaysPart1.reverse(), endoDay, ...oftalmoDays, ...orlDays, ...scheduledDaysPart2 ];
             
             const finalMap = new Map();
-            finalPlannedDays.forEach(day => {
-                const existingDay = finalMap.get(day.date) || { date: day.date, blocks: [], topicsList: [] };
-                if (day.blocks) existingDay.blocks.push(...day.blocks);
-                if (day.topicsList) existingDay.topicsList.push(...day.topicsList);
-                finalMap.set(day.date, existingDay);
-            });
-
+            finalPlannedDays.forEach(day => { finalMap.set(day.date, {...finalMap.get(day.date), ...day}); });
             let lastPlannedDate = new Date(Array.from(finalMap.keys()).reduce((max, date) => date > max ? date : max, '2000-01-01'));
             let finalCalendarDate = new Date('2025-09-30');
             while(lastPlannedDate < finalCalendarDate) {
@@ -596,7 +531,6 @@
             subjectToTopicsMap.clear();
             if (!studyPlan) return;
             studyPlan.forEach(day => {
-                // Lógica para la estructura antigua `blocks`
                 if (day.blocks) {
                     day.blocks.forEach(block => {
                         if (block.subject) {
@@ -608,7 +542,6 @@
                         }
                     });
                 }
-                // Lógica para la nueva estructura `topicsList`
                 if (day.topicsList) {
                     day.topicsList.forEach(topicObj => {
                         if (topicObj.subject) {
@@ -664,7 +597,6 @@
                         const dayData = daysMap.get(dateString);
                         let contentHTML = '<ul>';
 
-                        // Antigua estructura 'blocks'
                         if (dayData && dayData.blocks) {
                             dayData.blocks.forEach(block => {
                                 if (block.subject && !globallyDisplayedSubjects.has(block.subject)) {
@@ -677,7 +609,6 @@
                             });
                         }
                         
-                        // Nueva estructura 'topicsList'
                         if (dayData && dayData.topicsList) {
                             dayData.topicsList.forEach(topicObj => {
                                 if (topicObj.isFirstOfSubject) {
@@ -781,7 +712,6 @@
                 let movedItem = null;
                 let removed = false;
 
-                // Lógica de extracción para la nueva estructura
                 if (structureType === 'object') {
                     if (sourceDay.topicsList) {
                         const itemIndex = sourceDay.topicsList.findIndex(item => item.topicName === topicName);
@@ -790,14 +720,14 @@
                             removed = true;
                         }
                     }
-                } else { // Lógica de extracción para la estructura antigua
+                } else { 
                     if (sourceDay.blocks) {
                         sourceDay.blocks.forEach(block => {
                             if (block.subject === subject && block.topics) {
                                 const topicIndex = block.topics.indexOf(topicName);
                                 if (topicIndex > -1) {
                                     block.topics.splice(topicIndex, 1);
-                                    movedItem = topicName; // Solo movemos el string
+                                    movedItem = topicName;
                                     removed = true;
                                 }
                             }
@@ -806,7 +736,6 @@
                 }
                 if (!removed) { clearDragStyles(); return; }
 
-                // Lógica de inserción
                 const targetTopicEl = e.target.closest('.topic-item');
                 if (structureType === 'object') {
                     if (!targetDay.topicsList) targetDay.topicsList = [];
@@ -820,7 +749,7 @@
                         targetDay.topicsList.push(movedItem);
                     }
                     recalculateFirstOfSubjectFlags(studyPlan);
-                } else { // Inserción para estructura antigua
+                } else { 
                     let targetBlock = targetDay.blocks ? targetDay.blocks.find(b => b.subject === subject) : null;
                     if (!targetBlock) {
                         if (!targetDay.blocks) targetDay.blocks = [];
@@ -830,10 +759,11 @@
                     targetBlock.topics.push(movedItem);
                 }
                 
-                // Limpieza de bloques vacíos (para estructura antigua)
-                studyPlan.forEach(day => {
-                    if (day.blocks) day.blocks = day.blocks.filter(block => block.topics && block.topics.length > 0);
-                });
+                if (studyPlan) {
+                    studyPlan.forEach(day => {
+                        if (day.blocks) day.blocks = day.blocks.filter(block => block.topics && block.topics.length > 0);
+                    });
+                }
 
                 clearDragStyles();
                 saveData('studyPlan', studyPlan);
