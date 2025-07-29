@@ -447,8 +447,8 @@
             const oftalmoDays = [ { date: "2025-06-30", blocks: [ { subject: "OFTALMOLOGÍA", topics: ["Blefaritis", "Orzuelo", "Conjuntivitis (alergica, bacteriana, neonatal, viral)", "Chalazión", "Glaucoma de ángulo abierto", "Glaucoma de ángulo cerrado", "Glaucoma congénito"] } ] }, { date: "2025-07-01", blocks: [ { subject: "OFTALMOLOGÍA", topics: ["Degeneración macular", "Desprendimiento de retina", "Retinopatía diabética", "Retinopatía hipertensiva", "Catarata", "Trauma ocular", "Ojo rojo"] } ] } ];
             const orlDays = [ { date: "2025-07-02", blocks: [ { subject: "ORL", topics: ["Epistaxis", "VPPB", "Parálisis de Bell", "Neuralgia de trigémino", "Neuritis vestibular", "Fracturas nasales"] } ] }, { date: "2025-07-03", blocks: [ { subject: "ORL", topics: ["Rinosinusitis", "Faringoamigdalitis", "Angina de Ludwig", "Otitis", "Mastoiditis aguda"] } ] } ];
             
-            // Parte 2: Temas de Julio en adelante (nueva estructura de datos, plan manual)
-             const manualScheduleData = [
+            // Parte 2: Temas de Julio en adelante (nueva estructura de datos, plan manual y dinámico)
+            const manualScheduleData = [
                 { date: '2025-07-10', subject: 'TYO', topics: ["Fractura de clavícula", "Fractura de húmero proximal", "Luxación glenohumeral", "Luxación de codo"] },
                 { date: '2025-07-13', subject: 'TYO', topics: ["Codo de niñera", "Fracturas de codo", "Fracturas de antebrazo", "Fractura de radio distal"] },
                 { date: '2025-07-14', subject: 'TYO', topics: ["Lesiones fisiarias", "Fracturas expuestas", "Fractura de cadera", "Epifisiolistesis femoral"] },
@@ -456,10 +456,13 @@
                 { date: '2025-07-16', subject: 'TYO', topics: ["Sarcoma de Ewing", "Esguince de tobillo", "Fractura de tobillo", "Rotura de talón de Aquiles"] },
                 { date: '2025-07-17', subject: 'TYO', topics: ["Costilla cervical", "Esguince cervical", "Pie equino varo", "Pie plano"] },
                 { date: '2025-07-18', subject: 'TYO', topics: ["Túnel del carpo", "Síndrome de hombro doloroso"] },
+                { date: '2025-07-26', subject: 'CARDIOLOGÍA', topics: ['Fiebre reumática', 'Pericarditis', 'Endocarditis infecciosa', 'Infarto agudo de miocardio'] },
+                { date: '2025-07-27', subject: 'CARDIOLOGÍA', topics: ['Enfermedad coronaria', 'Disección aórtica', 'Aneurisma aórtico abdominal', 'Cor pulmonar crónico'] },
+                { date: '2025-07-28', subject: 'CARDIOLOGÍA', topics: ['Edema pulmonar', 'Hipotensión ortostática', 'Rehabilitación cardíaca'] }
             ];
 
             const topicsToDistribute = {
-                'CARDIOLOGÍA': ["Estenosis aórtica", "Insuficiencia aórtica", "Estenosis mitral", "Insuficiencia mitral", "Otras valvulopatías", "Hipertensión arterial sistémica", "Crisis hipertensivas", "Hipertensión pulmonar", "Insuficiencia cardíaca aguda", "Insuficiencia cardíaca crónica", "Fiebre reumática", "Pericarditis", "Endocarditis infecciosa", "Infarto agudo de miocardio", "Enfermedad coronaria", "Disección aórtica", "Aneurisma aórtico abdominal", "Cor pulmonar crónico", "Edema pulmonar", "Hipotensión ortostática", "Rehabilitación cardíaca"],
+                'CARDIOLOGÍA': ["Estenosis aórtica", "Insuficiencia aórtica", "Estenosis mitral", "Insuficiencia mitral", "Otras valvulopatías", "Hipertensión arterial sistémica", "Crisis hipertensivas", "Hipertensión pulmonar", "Insuficiencia cardíaca aguda", "Insuficiencia cardíaca crónica"],
                 'ANGIOLOGÍA': ["Enfermedad arterial periférica", "Insuficiencia venosa", "Pie diabético", "Trombosis venosa profunda", "Tromboembolia pulmonar", "Paget Schroetter", "Tromboembolia venosa en obstetricia", "Úlceras por presión"],
                 'ACLS': ["Soporte vital básico", "RCP", "Taquicardia ACLS", "Taquicardia supraventricular", "Bloqueos AV", "Bradicardia", "Fibrilación auricular", "Fibrilación ventricular", "Síndrome de WPW", "PLS", "Ahogamiento"],
                 'ATLS': ["Politrauma", "Tipos de shock", "Choque hipovolémico", "Shock neurogénico", "TCE adultos", "TCE pediátrico", "Fracturas de cráneo", "Trauma torácico", "Hemotórax", "Neumotórax a tensión", "Neumotórax abierto", "Neumotórax simple", "Taponamiento cardíaco", "Lesión traqueobronquial", "Trauma abdominal", "Ruptura diafragmática", "Trauma esplénico", "Trauma espinal", "Trauma pélvico", "Trauma obstétrico", "Quemaduras", "Gran quemado", "Catéter venoso central", "Hipotermia"],
@@ -479,7 +482,7 @@
                 'VACUNAS': ["Vacunas generalidades", "Tipos de vacunas", "Vacunación universal", "Aplicación de vacunas", "Vacuna para personal de salud", "Vacunas en el embarazo", "Esquema de vacunación", "BCG", "Hepatitis A", "Hepatitis B", "Hexavalente", "Influenza", "Neumocócica", "Rotavirus", "Sabin", "Salmonella", "DPT", "SRP", "Tétanos", "Varicela", "VPH"]
             };
 
-            const specialtyOrder = Object.keys(topicsToDistribute);
+            const specialtyOrder = ['CARDIOLOGÍA', 'ANGIOLOGÍA', 'ACLS', 'ATLS', 'TOXICOLOGÍA', 'GASTROENTEROLOGÍA', 'CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA', 'CIRUGÍA PEDIÁTRICA', 'GINECOLOGÍA', 'ONCOGINE', 'OBSTETRICIA', 'HEMORRAGIAS OBSTÉTRICAS', 'NEONATOLOGÍA', 'CONGÉNITAS', 'ESCOLAR', 'NUTRICIÓN PEDIÁTRICA', 'INFECTOLOGÍA PEDIÁTRICA', 'VACUNAS'];
             let flatTopicsToDistribute = [];
             specialtyOrder.forEach(specialty => {
                 const topics = topicsToDistribute[specialty];
@@ -506,11 +509,11 @@
                     structureType: 'object'
                 }));
                 planDays.get(dateStr).topicsList.push(...dayTopics);
-            });
-
-            // Distribuir el resto de los temas
+             });
+            
+             // Distribuir el resto de los temas
             const otherTopics = flatTopicsToDistribute.filter(t => t.subject !== 'TYO' && t.subject !== 'VACUNAS');
-            const otherStartDate = new Date('2025-07-20T00:00:00');
+            const otherStartDate = new Date('2025-07-29T00:00:00');
             const otherEndDate = new Date('2025-09-18T00:00:00');
             const otherDaysCount = Math.round((otherEndDate - otherStartDate) / (1000 * 60 * 60 * 24)) + 1;
             const topicsPerDay = Math.ceil(otherTopics.length / otherDaysCount);
