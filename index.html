@@ -71,18 +71,8 @@
         .topic-item.topic-rentable>span{color:var(--rentable-color);font-weight:600}
         .topic-item.topic-rentable::before{color:var(--rentable-color)}
         .topic-item.topic-rentable:not(.topic-completed):not(.dragging):hover>span{color:#ff9ee2}
-        
-        /* ==================== INICIO DE LA MODIFICACIÓN ==================== */
-        /* Estas reglas aseguran que un tema rentable (rosa) se vuelva gris 
-           cuando también tenga la clase de completado. */
-        .topic-item.topic-rentable.topic-completed > span {
-            color: var(--text-completed);
-        }
-        .topic-item.topic-rentable.topic-completed::before {
-            color: var(--bullet-completed);
-        }
-        /* ===================== FIN DE LA MODIFICACIÓN ====================== */
-
+        .topic-item.topic-rentable.topic-completed > span {color: var(--text-completed);}
+        .topic-item.topic-rentable.topic-completed::before {color: var(--bullet-completed);}
         .kanban-board{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;height:100%}
         .kanban-column{background-color:var(--plan-bg);border-radius:12px;display:flex;flex-direction:column;max-height:100%}
         .kanban-column-header{padding:15px 20px;border-bottom:1px solid var(--main-border);display:flex;align-items:center;gap:10px;position:sticky;top:0;background-color:var(--plan-bg);z-index:10}
@@ -295,7 +285,6 @@
         let countdownTargetDateStr;
         let countdownInterval = null;
         const ALL_TASK_IDS = ['task-1-1', 'task-1-2', 'task-1-3', 'task-2-1', 'task-2-2', 'task-3-1', 'task-4-1', 'task-5-1', 'task-5-2', 'task-6-1'];
-        const PLAN_VERSION = 12; // Se incrementa la versión para forzar la regeneración y la migración de datos
         
         let calendarView, boardView, viewSwitcher, calendarContainer, todoContainer, inprogressContainer, doneContainer;
         let dayModal, dayModalOverlay, dayModalTitle, dayModalTopicsContainer, dayModalNotes, saveNoteButton;
@@ -362,14 +351,15 @@
             
             const dataUpdated = migrateInitialProgress();
 
-            const savedPlanVersion = getData('planVersion', 1);
+            // ==================== INICIO DE LA CORRECCIÓN ====================
+            // Esta lógica es ahora más segura. Solo generará un plan si no existe.
+            // Nunca borrará un plan existente, protegiendo tus cambios.
             studyPlan = getData('studyPlan');
-
-            if (!studyPlan || savedPlanVersion < PLAN_VERSION) {
+            if (!studyPlan) {
                 studyPlan = generateStudyPlan();
                 saveData('studyPlan', studyPlan);
-                saveData('planVersion', PLAN_VERSION);
             }
+            // ===================== FIN DE LA CORRECCIÓN ======================
 
             countdownTargetDateStr = getData('countdownTarget', '2025-09-23');
             countdownDatePicker.value = countdownTargetDateStr;
@@ -427,7 +417,6 @@
                             scoreAciertos: data.aciertos,
                             scoreReactivos: data.reactivos,
                         };
-                        // Marcar todas las tareas como completadas si hay una puntuación
                         if (data.aciertos > 0 || data.reactivos > 0) {
                              userProgress.topicData[topicId]['task-5-1'] = true;
                              userProgress.topicData[topicId]['task-5-2'] = true;
@@ -462,7 +451,6 @@
         }
 
         function generateStudyPlan() {
-            // Parte 1: Temas pre-julio (se mantienen igual, estructura original de `blocks`)
             const topicsBySpecialtyPart1 = {
                 "UROLOGÍA": [ "Escroto agudo", "Torsión testicular", "Hiperplasia prostática benigna", "Cáncer de próstata", "Pielonefritis aguda", "Infección de tracto urinario", "Urolitiasis", "Orquiepididimitis", "Cáncer testicular", "Disfunción eréctil", "Estenosis del meato urinario", "Hidrocele", "Varicocele", "Prostatitis aguda", "Cáncer de vejiga", "Cáncer renal", "Incontinencia urinaria", "Retención aguda de orina" ], "ENDOCRINOLOGÍA": [ "Diabetes mellitus", "Prediabetes", "Diabetes en el adulto mayor", "Diabetes en pediatría", "Cetoacidosis diabética y EHH", "Hipoglucemia", "Enfermedad de Cushing / Síndrome de Cushing", "Hiperprolactinemia", "Acromegalia", "Feocromocitoma", "Hiperaldosteronismo", "Hiperparatiroidismo", "Neoplasia endocrina múltple", "Alopecia endocrina" ], "INFECTOLOGÍA": [ "Brucelosis", "Cisticercosis", "Clostridium", "Diarrea aguda en adultos", "Diarrea en niños", "Chinkungunya", "Dengue", "Zika", "Paludismo", "Salmonella Fiebre tifoidea", "Sepsis y choque séptico", "Tuberculosis pulmonar", "ETS Generalidades", "VIH Adultos", "VIH Madre e hijo", "RV yOportunistas", "Sarcoma de Kaposi", "Giardiasis", "Tuberculosis extrapulmonar", "Lepra", "Medios de cultivo", "Actinomicosis", "Amebiasis intestinal", "Anquilostomiasis", "Ascariasis", "Aspergilosis", "Coccidioidomicosis", "Difteria", "Enfermedad de Chagas", "Enfermedad de Lyme", "Estrongiloidiasis", "Fascitis necrosante", "Fiebre de origen desconocido", "Filariasis linfática", "Filariasis ocular Loasis", "Infecciones odontogénicas", "Leishmaniasis", "Leptospirosis", "Mucormicosis", "Oncocercosis", "Oxiuriasis o enterobiasis", "Poliomielitis", "Rabia", "Tricuriasis", "Triquinosis", "Neumonía adquirida en la comunidad", "Neumonía bacteriana adquirida en la comunidad Niños", "Influenza", "Meningitis", "Encefalitis viral", "Absceso cerebral" ], "HEMATOLOGÍA": [ "Anemia generalidades", "Anemia ferropénica Adultos", "Leucemias", "Linfomas", "Trombocitopenia inmune" ], "NEUROLOGÍA": [ "Cefalea Secundarias", "Cefaleas primarias", "Crisis convulsivas", "Estatus epiléptico", "Crisis febriles", "Enfermedad de Parkinson", "Evc isquémico", "Hemorragia subaracnoidea", "Guillain Barré", "Esclerosis múltiple", "Evc hemorrágico", "Miastenia gravis", "Muerte encefálica" ], "NEUMOLOGÍA": [ "Asma en pediátricos", "Exacerbación de asma", "Cáncer de pulmón", "Epoc", "Derrame pleural", "Tabaquismo" ], "REUMATOLOGÍA": [ "Artritis reactiva", "Artritis reumatoide", "Espondilitis anquilosante", "Gota", "Lupus eritematoso sistémico", "Arteritis de la temporal", "Granulomatosis de Wegener", "Artritis séptica" ], "NEFROLOGÍA": [ "Lesión renal aguda", "Enfermedad renal crónica", "Nefropatía diabética", "Síndrome nefrítico y nefrootico", "Trastorno ácido-base", "Nefritis lúpica" ], "DERMATOLOGÍA": [ "Dermatitis atópica", "Dermatofitosis", "SSJ y NET", "Escabiosis - Sarna", "Impétigo", "Melanoma", "Psoriasis", "Carcinoma basocelular", "Acné vulgar", "Erisipela", "Urticaria", "Dermatitis por contacto", "Pediculosis capitis", "Síndrome de Ritter", "Carcinoma espinocelular" ], "PSIQUIATRÍA": [ "Abuso de sustancias", "Abstinencia alcohólica", "Trastorno por alcohol", "Esquizofrenia", "Estrés post traumático", "Trastornos del sueño", "Intento de suicidio", "Tdah", "Trastorno bipolar", "Trastornos de ansiedad", "Trastornos de conducta alimentaria", "Consumo de mariguana", "Violencia contra la mujer", "Autismo", "Síndrome de Munchausen" ], "GERIATRÍA": [ "Valoración geriátrica", "Alzheimer", "Delirium", "Demencia vascular", "Deterioro cognitivo", "Insomnio en el adulto mayor", "Síndrome de caídas", "Síndrome de fragilidad", "Maltrato en el adulto mayor", "Colapso del cuidador", "Depresión mayor" ], "GENÉTICA": [ "Síndrome de Down", "Síndrome de Klinefelter", "Síndrome de Turner", "Síndrome de Marfan", "Enfermedad de Wilson", "Síndrome de Dravet", "Síndrome de Lynch", "Síndrome de Peutz Jegher", "Von Hippel Lindau" ]
             };
@@ -486,51 +474,40 @@
             const oftalmoDays = [ { date: "2025-06-30", blocks: [ { subject: "OFTALMOLOGÍA", topics: ["Blefaritis", "Orzuelo", "Conjuntivitis (alergica, bacteriana, neonatal, viral)", "Chalazión", "Glaucoma de ángulo abierto", "Glaucoma de ángulo cerrado", "Glaucoma congénito"] } ] }, { date: "2025-07-01", blocks: [ { subject: "OFTALMOLOGÍA", topics: ["Degeneración macular", "Desprendimiento de retina", "Retinopatía diabética", "Retinopatía hipertensiva", "Catarata", "Trauma ocular", "Ojo rojo"] } ] } ];
             const orlDays = [ { date: "2025-07-02", blocks: [ { subject: "ORL", topics: ["Epistaxis", "VPPB", "Parálisis de Bell", "Neuralgia de trigémino", "Neuritis vestibular", "Fracturas nasales"] } ] }, { date: "2025-07-03", blocks: [ { subject: "ORL", topics: ["Rinosinusitis", "Faringoamigdalitis", "Angina de Ludwig", "Otitis", "Mastoiditis aguda"] } ] } ];
             
-            // Parte 2: Temas de Julio en adelante (nueva estructura de datos)
             const allNewTopicsBySpecialty = { 
                 "TYO": [ "Osteoartritis", "Osteomielitis", "Osteosarcoma", "Sarcoma de Ewing", "Tumores óseos malignos", "Embolia grasa", "Costilla cervical", "Esguince cervical", "Lumbalgia", "Hernia de disco", "Túnel del carpo", "Síndrome de hombro doloroso", "Fractura de clavícula", "Fractura de húmero proximal", "Luxación glenohumeral", "Luxación de codo", "Codo de niñera", "Fracturas de codo", "Fracturas de antebrazo", "Fractura de radio distal", "Lesiones fisiarias", "Fracturas expuestas", "Fractura de cadera", "Epifisiolistesis femoral", "Legg Calvé Perthes", "Luxación coxofemoral", "Lesiones de rodilla", "Fractura de diáfisis de tibia", "Esguince de tobillo", "Fractura de tobillo", "Rotura de talón de Aquiles", "Pie equino varo", "Pie plano" ]
             };
 
             const manuallyScheduledDays = [
-                // CARDIOLOGÍA
                 { date: '2025-07-26', specialty: 'CARDIOLOGÍA', topics: ["Fiebre reumática", "Pericarditis", "Endocarditis infecciosa", "Infarto agudo de miocardio"] },
                 { date: '2025-07-27', specialty: 'CARDIOLOGÍA', topics: ["Enfermedad coronaria", "Disección aórtica", "Aneurisma aórtico abdominal", "Cor pulmonar crónico"] },
                 { date: '2025-07-28', specialty: 'CARDIOLOGÍA', topics: ["Edema pulmonar", "Hipotensión ortostática", "Rehabilitación cardíaca"] },
-                // CARDIOLOGÍA II
                 { date: '2025-07-29', specialty: 'CARDIOLOGÍA II', topics: ["Estenosis aórtica", "Insuficiencia aórtica", "Estenosis mitral", "Insuficiencia mitral", "Otras valvulopatías", "Hipertensión arterial sistémica"] },
                 { date: '2025-07-30', specialty: 'CARDIOLOGÍA II', topics: ["Crisis hipertensivas", "Hipertensión pulmonar", "Insuficiencia cardíaca aguda", "Insuficiencia cardíaca crónica", "Enfermedad arterial periférica", "Insuficiencia venosa"] },
-                // ANGIOLOGÍA
                 { date: '2025-07-31', specialty: 'ANGIOLOGÍA', topics: ["Pie diabético", "Trombosis venosa profunda", "Tromboembolia pulmonar", "Paget Schroetter", "Tromboembolia venosa en obstetricia", "Úlceras por presión"] },
-                // ACLS
                 { date: '2025-08-01', specialty: 'ACLS', topics: ["Soporte vital básico", "RCP", "Taquicardia ACLS", "Taquicardia supraventricular", "Bloqueos AV", "Bradicardia"] },
                 { date: '2025-08-02', specialty: 'ACLS', topics: ["Fibrilación auricular", "Fibrilación ventricular", "Síndrome de WPW", "PLS", "Ahogamiento", "Politrauma"] },
-                // ATLS
                 { date: '2025-08-03', specialty: 'ATLS', topics: ["Tipos de shock", "Choque hipovolémico", "Shock neurogénico", "TCE adultos", "TCE pediátrico", "Fracturas de cráneo"] },
-                { date: '2025-08-04', specialty: 'ATLS', topics: ["Trauma torácico", "Hemotórax", "Neumotórax a tensión", "Neumotórax abierto", "Neumotórax simple", "Taponamiento cardíaco"] },
+                { date: '2025-08-04', specialty: 'ATLS', topics: ["Trauma torácico", "Hemotórax", "Neumotórax a tensión", "Neumotórax aberto", "Neumotórax simple", "Taponamiento cardíaco"] },
                 { date: '2025-08-05', specialty: 'ATLS', topics: ["Lesión traqueobronquial", "Trauma abdominal", "Ruptura diafragmática", "Trauma esplénico", "Trauma espinal", "Trauma pélvico"] },
                 { date: '2025-08-06', specialty: 'ATLS', topics: ["Trauma obstétrico", "Quemaduras", "Gran quemado", "Catéter venoso central", "Hipotermia", "Manejo de intoxicaciones"] },
-                // TOXICOLOGÍA
                 { date: '2025-08-07', specialty: 'TOXICOLOGÍA', topics: ["Toxíndromes", "Intoxicación por benzodiacepinas", "Intoxicación por organofosforados", "Intoxicación por paracetamol", "Intoxicación por salicilatos", "Intoxicación por etanol"] },
                 { date: '2025-08-08', specialty: 'TOXICOLOGÍA', topics: ["Intoxicación por monóxido de carbono", "Intoxicación por opiáceos", "Intoxicación por anfetaminas", "Intoxicación por fentanilo", "Intoxicación por DMT", "Intoxicación por hidrocarburos"] },
                 { date: '2025-08-09', specialty: 'TOXICOLOGÍA', topics: ["Intoxicación por metales pesados", "Intoxicación por plomo", "Intoxicación por alcoholes", "Ingesta de cáusticos", "Intoxicación alimentaria", "Anafilaxia"] },
                 { date: '2025-08-10', specialty: 'TOXICOLOGÍA', topics: ["Picadura de alacrán", "Mordedura de serpiente", "Lactrodectus", "Loxosceles", "Picadura de himenópteros", "Golpe de calor"] },
-                // GASTROENTEROLOGÍA
                 { date: '2025-08-11', specialty: 'GASTROENTEROLOGÍA', topics: ["Reflujo ERGE", "Enfermedad ácido péptica", "Síndrome de intestino irritable", "Dispepsia funcional", "Mallory Weiss", "Zollinger Ellison"] },
                 { date: '2025-08-12', specialty: 'GASTROENTEROLOGÍA', topics: ["Acalasia", "Esófago de Barrett", "Enfermedad celíaca", "Enfermedad de Crohn", "Colitis ulcerativa", "Enfermedad diverticular"] },
                 { date: '2025-08-13', specialty: 'GASTROENTEROLOGÍA', topics: ["Sangrado TDA", "Sangrado TDB", "Varices esofágicas", "EHGNA", "Hepatitis A", "Hepatitis B"] },
                 { date: '2025-08-14', specialty: 'GASTROENTEROLOGÍA', topics: ["Hepatitis C", "Hepatitis autoinmune", "Absceso hepático amebiano", "Absceso hepático piógeno", "Cirrosis hepática", "Insuficiencia hepática"] },
                 { date: '2025-08-15', specialty: 'GASTROENTEROLOGÍA', topics: ["Ascitis", "Encefalopatía hepática", "Pancreatitis aguda", "Pancreatitis crónica", "Cáncer gástrico", "Cáncer de esófago"] },
                 { date: '2025-08-16', specialty: 'GASTROENTEROLOGÍA', topics: ["Cáncer de páncreas", "Carcinoma hepatocelular", "Apendicitis aguda", "Apendicitis en el embarazo", "Hernias", "Hernia inguinal"] },
-                // CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA
                 { date: '2025-08-17', specialty: 'CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA', topics: ["Hernia femoral", "Hernia hiatal", "Hernia umbilical", "Hernia ventral", "Colecistitis aguda", "Colelitiasis"] },
                 { date: '2025-08-18', specialty: 'CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA', topics: ["Coledocolitiasis", "Colangitis aguda", "Oclusión intestinal", "Isquemia intestinal", "Vólvulo de sigmoides", "Vólvulo de ciego"] },
                 { date: '2025-08-19', specialty: 'CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA', topics: ["Enfermedad hemorroidal", "Fístula anal", "Fisura anal", "Absceso anal", "Quiste pilonidal", "Cáncer colorrectal"] },
                 { date: '2025-08-20', specialty: 'CIRUGÍA ABDOMINAL Y COLOPROCTOLOGÍA', topics: ["Poliposis adenomatosa familiar PAF", "Fístulas biliointestinales", "Colangiocarcinoma", "Complicaciones post Qx", "Heridas quirúrgicas", "Atresia esofágica"] },
-                // CIRUGÍA PEDIÁTRICA
                 { date: '2025-08-21', specialty: 'CIRUGÍA PEDIÁTRICA', topics: ["Atresia duodenal", "Atresia yeyunoileal", "Atresia biliar", "Atresia de coanas", "Estenosis pilórica", "Hernia diafragmática congénita"] },
                 { date: '2025-08-22', specialty: 'CIRUGÍA PEDIÁTRICA', topics: ["Malrotación intestinal", "Invaginación intestinal", "Divertículo de Meckel", "Hirschsprung", "Enfermedad de Hirschsprung", "Patología umbilical"] },
                 { date: '2025-08-23', specialty: 'CIRUGÍA PEDIÁTRICA', topics: ["Criptorquidia", "Espina bífida", "Malformaciones rectales", "Retinoblastoma", "Nefroblastoma", "Neuroblastoma", "Tumor abdominal"] },
-                // GINECOLOGÍA
                 { date: '2025-08-24', specialty: 'GINECOLOGÍA', topics: ["Amenorreas primarias", "Amenorreas secundarias", "Sangrado uterino anormal", "Dismenorrea aguda", "Adenomiosis", "Endometriosis"] },
                 { date: '2025-08-25', specialty: 'GINECOLOGÍA', topics: ["Miomatosis uterina", "Hiperplasia endometrial", "Quiste de ovario benigno", "Torsión ovárica", "Ovario poliquístico", "Enfermedad pélvica inflamatoria"] },
                 { date: '2025-08-26', specialty: 'GINECOLOGÍA', topics: ["Hidrosalpinx", "Fitz-Hugh-Curtis", "Vaginitis bacteriana", "Vaginitis infecciosa", "Tricomoniasis", "Bartolinitis"] },
@@ -538,41 +515,31 @@
                 { date: '2025-08-28', specialty: 'GINECOLOGÍA', topics: ["Quiste mamario", "Patología mamaria benigna", "Osteoporosis post menopausia", "Menopausia y climaterio", "Insuficiencia ovárica primaria", "Anticonceptivos generalidades"] },
                 { date: '2025-08-29', specialty: 'GINECOLOGÍA', topics: ["Anticonceptivos GPC", "Anticonceptivos hormonales combinados", "Anticoncepción de emergencia", "DIU de cobre", "DIU de levonorgestrel", "Implante subdérmico"] },
                 { date: '2025-08-30', specialty: 'GINECOLOGÍA', topics: ["Progestágenos solos", "Lactancia como anticonceptivo", "Condón", "Vasectomía", "Oclusión tubaria bilateral OTB", "Infertilidad", "Cistocele e incontinencia"] },
-                // ONCOGINE
                 { date: '2025-08-31', specialty: 'ONCOGINE', topics: ["Tamizaje cáncer de mama", "Cáncer de mama", "Cáncer cérvicouterino", "Cáncer de endometrio", "Cáncer de ovario", "Cáncer de vagina", "Tumores anexiales"] },
-                // OBSTETRICIA
                 { date: '2025-09-01', specialty: 'OBSTETRICIA', topics: ["Control prenatal", "Aloinmunización materna", "Estática fetal", "Tipos de pelvis", "Atención del parto", "Manejo activo del parto"] },
                 { date: '2025-09-02', specialty: 'OBSTETRICIA', topics: ["Cesárea", "Parto pretérmino", "Puerperio fisiológico", "Líquido amniótico", "Ruptura prematura de membranas", "Corioamnionitis"] },
                 { date: '2025-09-03', specialty: 'OBSTETRICIA', topics: ["Distocias", "Embarazo múltiple", "Endometritis puerperal", "Hiperémesis gravídica", "Insuficiencia cervical", "Muerte fetal"] },
                 { date: '2025-09-04', specialty: 'OBSTETRICIA', topics: ["Enfermedades hipertensivas del embarazo", "Preeclampsia sin datos de severidad", "Síndrome de HELLP", "Diabetes gestacional", "IVU en el embarazo", "Restricción del crecimiento intrauterino", "Sepsis puerperal"] },
                 { date: '2025-09-05', specialty: 'OBSTETRICIA', topics: ["Síndrome de Sheehan", "Depresión posparto", "Generalidades de hemorragias", "Hemorragia postparto", "Desgarro perineal", "Amenaza de aborto"] },
-                // HEMORRAGIAS OBSTÉTRICAS
                 { date: '2025-09-06', specialty: 'HEMORRAGIAS OBSTÉTRICAS', topics: ["Aborto espontáneo", "Acretismo placentario", "Atonía uterina", "Choque hemorrágico en obstetricia", "Desprendimiento prematuro de placenta normoinserta", "Embarazo ectópico"] },
                 { date: '2025-09-07', specialty: 'HEMORRAGIAS OBSTÉTRICAS', topics: ["Placenta previa", "Ruptura uterina", "Vasa previa", "Enfermedad trofoblástica gestacional", "APGAR", "Reanimación neonatal"] },
-                // NEONATOLOGÍA
                 { date: '2025-09-08', specialty: 'NEONATOLOGÍA', topics: ["Prematuro sano", "Recién nacido de término", "Apnea del prematuro", "Asfixia neonatal", "Síndrome de dificultad respiratoria", "Taquipnea transitoria del recién nacido"] },
                 { date: '2025-09-09', specialty: 'NEONATOLOGÍA', topics: ["Síndrome de aspiración de meconio", "Displasia broncopulmonar", "Silverman Anderson", "Maduración pulmonar", "Encefalopatía hipóxica", "Enfermedad hemorrágica del recién nacido"] },
                 { date: '2025-09-10', specialty: 'NEONATOLOGÍA', topics: ["Enterocolitis necrotizante", "Hipoacusia neonatal", "Hipoglucemia neonatal", "Ictericia neonatal", "Muerte súbita del lactante", "Sepsis neonatal"] },
                 { date: '2025-09-11', specialty: 'NEONATOLOGÍA', topics: ["Tamiz neonatal", "Lesiones de plexo braquial obstétrico", "Lesiones extracraneales", "Displasia del desarrollo de la cadera DDC", "Cardiopatías congénitas", "Tetralogía de Fallot"] },
-                // CONGÉNITAS
                 { date: '2025-09-12', specialty: 'CONGÉNITAS', topics: ["Coartación aórtica", "Persistencia del conducto arterioso", "Fibrosis quística", "Fenilcetonuria", "Galactosemia clásica", "STORCH"] },
                 { date: '2025-09-13', specialty: 'CONGÉNITAS', topics: ["STORCH Citomegalovirus", "STORCH Herpes simple", "STORCH Rubéola congénita", "STORCH Sífilis congénita", "STORCH Toxoplasmosis", "STORCH Varicela congénita"] },
-                // ESCOLAR
                 { date: '2025-09-14', specialty: 'ESCOLAR', topics: ["Control de niño sano", "Etapas del crecimiento", "Talla baja", "Alergia alimentaria", "Cuerpo extraño", "Dermatitis del pañal", "Estreñimiento funcional"] },
                 { date: '2025-09-15', specialty: 'ESCOLAR', topics: ["Hiperplasia adrenal congénita", "Hipotiroidismo congénito", "Maltrato infantil", "Mucopolisacaridosis", "Reflujo gastroesofágico del lactante", "Lactancia materna"] },
-                // NUTRICIÓN PEDIÁTRICA
                 { date: '2025-09-16', specialty: 'NUTRICIÓN PEDIÁTRICA', topics: ["Alimentación complementaria", "Desnutrición pediátrica", "Deficiencia de vitamina A", "Hipovitaminosis", "Raquitismo carencial", "Pelagra en niños", "Intolerancia a la lactosa"] },
                 { date: '2025-09-17', specialty: 'NUTRICIÓN PEDIÁTRICA', topics: ["Obesidad en escolares", "Síndrome metabólico en niños", "Adenitis mesentérica", "Onfalitis", "Exantemáticas Diferencial", "Eritema infeccioso"] },
-                // INFECTOLOGÍA PEDIÁTRICA
                 { date: '2025-09-18', specialty: 'INFECTOLOGÍA PEDIÁTRICA', topics: ["Escarlatina", "Exantema súbito", "Enfermedad de Kawasaki", "Síndrome mano pie boca", "Rubéola", "Sarampión", "Varicela", "Parotiditis", "Bronquiolitis", "Epiglotitis", "Laringotraqueitis CRUP", "Mononucleosis infecciosa", "Tos ferina", "IVU en menores"] },
-                // VACUNAS
                 { date: '2025-09-19', specialty: 'VACUNAS', topics: ["Vacunas generalidades", "Tipos de vacunas", "Vacunación universal", "Aplicación de vacunas", "Vacuna para personal de salud", "Vacunas en el embarazo", "Esquema de vacunación", "BCG", "Hepatitis A", "Hepatitis B", "Hexavalente"] },
                 { date: '2025-09-20', specialty: 'VACUNAS', topics: ["Influenza", "Neumocócica", "Rotavirus", "Sabin", "Salmonella", "DPT", "SRP", "Tétanos", "Varicela", "VPH"] },
             ];
             
             let planDays = new Map();
 
-            // Función para añadir temas a un día
             const addTopicsToDay = (dateStr, topics) => {
                 if (!planDays.has(dateStr)) {
                     planDays.set(dateStr, { date: dateStr, topicsList: [] });
@@ -584,7 +551,6 @@
                 dayData.topicsList.push(...topics);
             };
 
-            // TYO se mantiene en su bloque
             const tyoTopics = Object.entries(allNewTopicsBySpecialty).flatMap(([specialty, topics]) => 
                 topics.map(topicName => ({ 
                     topicName, 
@@ -603,7 +569,6 @@
                 }
             }
             
-            // Procesar los nuevos temas manualmente agendados
             const encounteredSubjects = new Set();
             manuallyScheduledDays.forEach(daySchedule => {
                 const isNewSpecialty = !encounteredSubjects.has(daySchedule.specialty);
@@ -620,7 +585,6 @@
             
             const scheduledDaysPart2 = Array.from(planDays.values());
             
-            // Combinar todo
             let finalPlannedDays = [ ...plannedDaysPart1.reverse(), endoDay, ...oftalmoDays, ...orlDays, ...scheduledDaysPart2 ];
             
             const finalMap = new Map();
@@ -671,7 +635,6 @@
             subjectToTopicsMap.clear();
             if (!studyPlan) return;
             studyPlan.forEach(day => {
-                // Lógica para la estructura antigua `blocks`
                 if (day.blocks) {
                     day.blocks.forEach(block => {
                         if (block.subject) {
@@ -683,7 +646,6 @@
                         }
                     });
                 }
-                // Lógica para la nueva estructura `topicsList`
                 if (day.topicsList) {
                     day.topicsList.forEach(topicObj => {
                         if (topicObj.subject) {
@@ -739,7 +701,6 @@
                         const dayData = daysMap.get(dateString);
                         let contentHTML = '<ul>';
 
-                        // Antigua estructura 'blocks'
                         if (dayData && dayData.blocks) {
                             dayData.blocks.forEach(block => {
                                 if (block.subject && !globallyDisplayedSubjects.has(block.subject)) {
@@ -752,7 +713,6 @@
                             });
                         }
                         
-                        // Nueva estructura 'topicsList'
                         if (dayData && dayData.topicsList) {
                             dayData.topicsList.forEach(topicObj => {
                                 if (topicObj.isFirstOfSubject) {
@@ -856,7 +816,6 @@
                 let movedItem = null;
                 let removed = false;
 
-                // Lógica de extracción para la nueva estructura
                 if (structureType === 'object') {
                     if (sourceDay.topicsList) {
                         const itemIndex = sourceDay.topicsList.findIndex(item => item.topicName === topicName);
@@ -865,14 +824,14 @@
                             removed = true;
                         }
                     }
-                } else { // Lógica de extracción para la estructura antigua
+                } else {
                     if (sourceDay.blocks) {
                         sourceDay.blocks.forEach(block => {
                             if (block.subject === subject && block.topics) {
                                 const topicIndex = block.topics.indexOf(topicName);
                                 if (topicIndex > -1) {
                                     block.topics.splice(topicIndex, 1);
-                                    movedItem = topicName; // Solo movemos el string
+                                    movedItem = topicName;
                                     removed = true;
                                 }
                             }
@@ -881,7 +840,6 @@
                 }
                 if (!removed) { clearDragStyles(); return; }
 
-                // Lógica de inserción
                 const targetTopicEl = e.target.closest('.topic-item');
                 if (structureType === 'object') {
                     if (!targetDay.topicsList) targetDay.topicsList = [];
@@ -895,7 +853,7 @@
                         targetDay.topicsList.push(movedItem);
                     }
                     recalculateFirstOfSubjectFlags(studyPlan);
-                } else { // Inserción para estructura antigua
+                } else {
                     let targetBlock = targetDay.blocks ? targetDay.blocks.find(b => b.subject === subject) : null;
                     if (!targetBlock) {
                         if (!targetDay.blocks) targetDay.blocks = [];
@@ -905,7 +863,6 @@
                     targetBlock.topics.push(movedItem);
                 }
                 
-                // Limpieza de bloques vacíos (para estructura antigua)
                 studyPlan.forEach(day => {
                     if (day.blocks) day.blocks = day.blocks.filter(block => block.topics && block.topics.length > 0);
                 });
