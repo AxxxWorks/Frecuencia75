@@ -257,7 +257,7 @@
         let countdownTargetDateStr;
         let countdownInterval = null;
         const ALL_TASK_IDS = ['task-1-1', 'task-1-2', 'task-1-3', 'task-2-1', 'task-2-2', 'task-3-1', 'task-4-1', 'task-5-1', 'task-5-2', 'task-6-1'];
-        const PLAN_VERSION = 11; // Se incrementa la versión para forzar la regeneración del plan modificado
+        const PLAN_VERSION = 12; // Se incrementa la versión para forzar la regeneración y la migración de datos
         
         let calendarView, boardView, viewSwitcher, calendarContainer, todoContainer, inprogressContainer, doneContainer;
         let dayModal, dayModalOverlay, dayModalTitle, dayModalTopicsContainer, dayModalNotes, saveNoteButton;
@@ -350,6 +350,7 @@
         function generateTopicId(topicName) { return `topic_${topicName.toLowerCase().replace(/[^a-z0-9]/g, '')}`; }
         function getScoreColor(percentage) { if (percentage >= 80) return 'var(--vfd-green)'; if (percentage >= 60) return 'var(--warning-color)'; return 'var(--error-color)'; }
         
+        // ========================= INICIO DE LA MODIFICACIÓN =========================
         function migrateInitialProgress() {
             const initialData = {
                 "ENDOCRINOLOGÍA": {
@@ -369,7 +370,9 @@
                 "NEUROLOGÍA": { "Cefalea Secundarias": {aciertos:12,reactivos:12}, "Cefaleas primarias": {aciertos:9,reactivos:12}, "Crisis convulsivas": {aciertos:4,reactivos:12}, "Estatus epiléptico": {aciertos:9,reactivos:12}, "Crisis febriles": {aciertos:5,reactivos:12}, "Enfermedad de Parkinson": {aciertos:6,reactivos:9}, "Evc isquémico": {aciertos:10,reactivos:12}, "Hemorragia subaracnoidea": {aciertos:9,reactivos:9}, "Guillain Barré": {aciertos:8,reactivos:9}, "Esclerosis múltiple": {aciertos:5,reactivos:12}, "Evc hemorrágico": {aciertos:6,reactivos:12}, "Miastenia gravis": {aciertos:5,reactivos:9}, "Muerte encefálica": {aciertos:6,reactivos:9} },
                 "HEMATOLOGÍA": { "Anemia generalidades": {aciertos:8,reactivos:18}, "Anemia ferropénica Adultos": {aciertos:8,reactivos:12}, "Leucemias": {aciertos:8,reactivos:12}, "Linfomas": {aciertos:10,reactivos:15}, "Trombocitopenia inmune": {aciertos:5,reactivos:9} },
                 "INFECTOLOGÍA": { "Brucelosis": {aciertos:3,reactivos:3}, "Cisticercosis": {aciertos:7,reactivos:9}, "Clostridium": {aciertos:8,reactivos:9}, "Diarrea aguda en adultos": {aciertos:9,reactivos:12}, "Diarrea en niños": {aciertos:10,reactivos:12}, "Chinkungunya": {aciertos:7,reactivos:9}, "Dengue": {aciertos:6,reactivos:9}, "Zika": {aciertos:8,reactivos:9}, "Paludismo": {aciertos:7,reactivos:9}, "Salmonella Fiebre tifoidea": {aciertos:7,reactivos:9}, "Sepsis y choque séptico": {aciertos:7,reactivos:9}, "Tuberculosis pulmonar": {aciertos:14,reactivos:21}, "ETS Generalidades": {aciertos:14,reactivos:18}, "VIH Adultos": {aciertos:16,reactivos:21}, "VIH Madre e hijo": {aciertos:17,reactivos:21}, "RV yOportunistas": {aciertos:14,reactivos:21}, "Sarcoma de Kaposi": {aciertos:6,reactivos:9}, "Giardiasis": {aciertos:8,reactivos:9}, "Tuberculosis extrapulmonar": {aciertos:10,reactivos:12}, "Lepra": {aciertos:5,reactivos:9}, "Medios de cultivo": {aciertos:5,reactivos:9}, "Actinomicosis": {aciertos:6,reactivos:9}, "Amebiasis intestinal": {aciertos:7,reactivos:9}, "Anquilostomiasis": {aciertos:9,reactivos:9}, "Ascariasis": {aciertos:9,reactivos:9}, "Aspergilosis": {aciertos:7,reactivos:9}, "Coccidioidomicosis": {aciertos:8,reactivos:9}, "Difteria": {aciertos:9,reactivos:9}, "Enfermedad de Chagas": {aciertos:7,reactivos:9}, "Enfermedad de Lyme": {aciertos:7,reactivos:9}, "Estrongiloidiasis": {aciertos:7,reactivos:9}, "Fascitis necrosante": {aciertos:7,reactivos:9}, "Fiebre de origen desconocido": {aciertos:5,reactivos:9}, "Filariasis linfática": {aciertos:4,reactivos:9}, "Filariasis ocular Loasis": {aciertos:7,reactivos:9}, "Infecciones odontogénicas": {aciertos:6,reactivos:9}, "Leishmaniasis": {aciertos:7,reactivos:9}, "Leptospirosis": {aciertos:8,reactivos:9}, "Mucormicosis": {aciertos:9,reactivos:9}, "Oncocercosis": {aciertos:7,reactivos:9}, "Oxiuriasis o enterobiasis": {aciertos:5,reactivos:9}, "Poliomielitis": {aciertos:8,reactivos:9}, "Rabia": {aciertos:7,reactivos:9}, "Tricuriasis": {aciertos:9,reactivos:9}, "Triquinosis": {aciertos:8,reactivos:9}, "Neumonía adquirida en la comunidad": {aciertos:3,reactivos:12}, "Neumonía bacteriana adquirida en la comunidad Niños": {aciertos:7,reactivos:12}, "Influenza": {aciertos:6,reactivos:9}, "Meningitis": {aciertos:10,reactivos:12}, "Encefalitis viral": {aciertos:8,reactivos:9}, "Absceso cerebral": {aciertos:8,reactivos:9} },
-                "UROLOGÍA": { "Escroto agudo": {aciertos:0,reactivos:0}, "Torsión testicular": {aciertos:0,reactivos:0}, "Hiperplasia prostática benigna": {aciertos:0,reactivos:0}, "Cáncer de próstata": {aciertos:0,reactivos:0}, "Pielonefritis aguda": {aciertos:0,reactivos:0}, "Infección de tracto urinario": {aciertos:0,reactivos:0}, "Urolitiasis": {aciertos:0,reactivos:0}, "Orquiepididimitis": {aciertos:0,reactivos:0}, "Cáncer testicular": {aciertos:0,reactivos:0}, "Disfunción eréctil": {aciertos:0,reactivos:0}, "Estenosis del meato urinario": {aciertos:0,reactivos:0}, "Hidrocele": {aciertos:0,reactivos:0}, "Varicocele": {aciertos:0,reactivos:0}, "Prostatitis aguda": {aciertos:0,reactivos:0}, "Cáncer de vejiga": {aciertos:0,reactivos:0}, "Cáncer renal": {aciertos:0,reactivos:0}, "Incontinencia urinaria": {aciertos:0,reactivos:0}, "Retención aguda de orina": {aciertos:0,reactivos:0} }
+                "UROLOGÍA": { "Escroto agudo": {aciertos:0,reactivos:0}, "Torsión testicular": {aciertos:0,reactivos:0}, "Hiperplasia prostática benigna": {aciertos:0,reactivos:0}, "Cáncer de próstata": {aciertos:0,reactivos:0}, "Pielonefritis aguda": {aciertos:0,reactivos:0}, "Infección de tracto urinario": {aciertos:0,reactivos:0}, "Urolitiasis": {aciertos:0,reactivos:0}, "Orquiepididimitis": {aciertos:0,reactivos:0}, "Cáncer testicular": {aciertos:0,reactivos:0}, "Disfunción eréctil": {aciertos:0,reactivos:0}, "Estenosis del meato urinario": {aciertos:0,reactivos:0}, "Hidrocele": {aciertos:0,reactivos:0}, "Varicocele": {aciertos:0,reactivos:0}, "Prostatitis aguda": {aciertos:0,reactivos:0}, "Cáncer de vejiga": {aciertos:0,reactivos:0}, "Cáncer renal": {aciertos:0,reactivos:0}, "Incontinencia urinaria": {aciertos:0,reactivos:0}, "Retención aguda de orina": {aciertos:0,reactivos:0} },
+                "TYO": { "Osteoartritis": {aciertos:83, reactivos:100}, "Osteomielitis": {aciertos:67, reactivos:100}, "Sarcoma de Ewing": {aciertos:78, reactivos:100}, "Tumores óseos malignos": {aciertos:67, reactivos:100}, "Embolia grasa": {aciertos:78, reactivos:100}, "Lumbalgia": {aciertos:89, reactivos:100}, "Hernia de disco": {aciertos:56, reactivos:100}, "Síndrome de hombro doloroso": {aciertos:44, reactivos:100}, "Fractura de clavícula": {aciertos:67, reactivos:100}, "Fractura de húmero proximal": {aciertos:67, reactivos:100}, "Luxación glenohumeral": {aciertos:89, reactivos:100}, "Luxación de codo": {aciertos:53, reactivos:100}, "Fracturas de codo": {aciertos:60, reactivos:100}, "Fracturas de antebrazo": {aciertos:89, reactivos:100}, "Fractura de radio distal": {aciertos:78, reactivos:100}, "Lesiones fisiarias": {aciertos:78, reactivos:100}, "Fracturas expuestas": {aciertos:56, reactivos:100}, "Fractura de cadera": {aciertos:67, reactivos:100}, "Legg Calvé Perthes": {aciertos:67, reactivos:100}, "Luxación coxofemoral": {aciertos:78, reactivos:100}, "Fractura de diáfisis de tibia": {aciertos:33, reactivos:100}, "Fractura de tobillo": {aciertos:67, reactivos:100} },
+                "CARDIOLOGÍA": { "Fiebre reumática": {aciertos:67, reactivos:100}, "Aneurisma aórtico abdominal": {aciertos:44, reactivos:100}, "Pericarditis": {aciertos:78, reactivos:100}, "Endocarditis infecciosa": {aciertos:56, reactivos:100}, "Enfermedad coronaria": {aciertos:89, reactivos:100}, "Cor pulmonar crónico": {aciertos:56, reactivos:100}, "Hipotensión ortostática": {aciertos:67, reactivos:100} }
             };
 
             let dataWasUpdated = false;
@@ -387,16 +390,17 @@
                             scoreAciertos: data.aciertos,
                             scoreReactivos: data.reactivos,
                         };
+                        // Marcar todas las tareas como completadas si hay una puntuación
                         if (data.aciertos > 0 || data.reactivos > 0) {
-                            ALL_TASK_IDS.forEach(taskId => {
-                                userProgress.topicData[topicId][taskId] = true;
-                            });
+                             userProgress.topicData[topicId]['task-5-1'] = true;
+                             userProgress.topicData[topicId]['task-5-2'] = true;
                         }
                     }
                 }
             }
             return dataWasUpdated;
         }
+        // ========================== FIN DE LA MODIFICACIÓN ===========================
         
         function recalculateFirstOfSubjectFlags(plan) {
             const subjectsFound = new Set();
@@ -421,7 +425,6 @@
             });
         }
 
-        // ========================= INICIO DE LA MODIFICACIÓN =========================
         function generateStudyPlan() {
             // Parte 1: Temas pre-julio (se mantienen igual, estructura original de `blocks`)
             const topicsBySpecialtyPart1 = {
@@ -598,7 +601,6 @@
             recalculateFirstOfSubjectFlags(finalPlan);
             return finalPlan;
         }
-        // ========================== FIN DE LA MODIFICACIÓN ===========================
 
         function getData(key, defaultValue = null) { const keys = key.split('.'); let result = userProgress; for (const k of keys) { if (result && typeof result === 'object' && k in result) { result = result[k]; } else { return defaultValue; } } return result; }
         function isTopicComplete(topicId) { return ALL_TASK_IDS.every(taskId => getData(`topicData.${topicId}.${taskId}`) === true); }
