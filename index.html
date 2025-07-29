@@ -257,7 +257,7 @@
         let countdownTargetDateStr;
         let countdownInterval = null;
         const ALL_TASK_IDS = ['task-1-1', 'task-1-2', 'task-1-3', 'task-2-1', 'task-2-2', 'task-3-1', 'task-4-1', 'task-5-1', 'task-5-2', 'task-6-1'];
-        const PLAN_VERSION = 8; // Se incrementa la versión para forzar la regeneración del plan modificado
+        const PLAN_VERSION = 10; // Se incrementa la versión para forzar la regeneración del plan modificado
         
         let calendarView, boardView, viewSwitcher, calendarContainer, todoContainer, inprogressContainer, doneContainer;
         let dayModal, dayModalOverlay, dayModalTitle, dayModalTopicsContainer, dayModalNotes, saveNoteButton;
@@ -447,40 +447,31 @@
             const oftalmoDays = [ { date: "2025-06-30", blocks: [ { subject: "OFTALMOLOGÍA", topics: ["Blefaritis", "Orzuelo", "Conjuntivitis (alergica, bacteriana, neonatal, viral)", "Chalazión", "Glaucoma de ángulo abierto", "Glaucoma de ángulo cerrado", "Glaucoma congénito"] } ] }, { date: "2025-07-01", blocks: [ { subject: "OFTALMOLOGÍA", topics: ["Degeneración macular", "Desprendimiento de retina", "Retinopatía diabética", "Retinopatía hipertensiva", "Catarata", "Trauma ocular", "Ojo rojo"] } ] } ];
             const orlDays = [ { date: "2025-07-02", blocks: [ { subject: "ORL", topics: ["Epistaxis", "VPPB", "Parálisis de Bell", "Neuralgia de trigémino", "Neuritis vestibular", "Fracturas nasales"] } ] }, { date: "2025-07-03", blocks: [ { subject: "ORL", topics: ["Rinosinusitis", "Faringoamigdalitis", "Angina de Ludwig", "Otitis", "Mastoiditis aguda"] } ] } ];
             
-            // Parte 2: Temas de Julio en adelante, ahora con la nueva estructura
-            const allNewTopicsBySpecialty = { 
-                "TYO": ["Osteoartritis", "Osteomielitis", "Osteosarcoma", "Sarcoma de Ewing", "Tumores óseos malignos", "Embolia grasa", "Costilla cervical", "Esguince cervical", "Lumbalgia", "Hernia de disco", "Túnel del carpo", "Síndrome de hombro doloroso", "Fractura de clavícula", "Fractura de húmero proximal", "Luxación glenohumeral", "Luxación de codo", "Codo de niñera", "Fracturas de codo", "Fracturas de antebrazo", "Fractura de radio distal", "Lesiones fisiarias", "Fracturas expuestas", "Fractura de cadera", "Epifisiolistesis femoral", "Legg Calvé Perthes", "Luxación coxofemoral", "Lesiones de rodilla", "Fractura de diáfisis de tibia", "Esguince de tobillo", "Fractura de tobillo", "Rotura de talón de Aquiles", "Pie equino varo", "Pie plano"]
-            };
+            // Parte 2: Temas de Julio en adelante - PLAN MANUAL
+            const manualPlanPart2 = [
+                { date: '2025-07-10', topics: [ { subject: "TYO", topic: "Osteoartritis"}, { subject: "TYO", topic: "Osteomielitis"}, { subject: "TYO", topic: "Osteosarcoma"}, { subject: "TYO", topic: "Sarcoma de Ewing"}, { subject: "TYO", topic: "Tumores óseos malignos"} ]},
+                { date: '2025-07-11', topics: [ { subject: "TYO", topic: "Embolia grasa"}, { subject: "TYO", topic: "Costilla cervical"}, { subject: "TYO", topic: "Esguince cervical"}, { subject: "TYO", topic: "Lumbalgia"}, { subject: "TYO", topic: "Hernia de disco"} ]},
+                { date: '2025-07-12', topics: [ { subject: "TYO", topic: "Túnel del carpo"}, { subject: "TYO", topic: "Síndrome de hombro doloroso"}, { subject: "TYO", topic: "Fractura de clavícula"}, { subject: "TYO", topic: "Fractura de húmero proximal"}, { subject: "TYO", topic: "Luxación glenohumeral"} ]},
+                { date: '2025-07-13', topics: [ { subject: "TYO", topic: "Luxación de codo"}, { subject: "TYO", topic: "Codo de niñera"}, { subject: "TYO", topic: "Fracturas de codo"}, { subject: "TYO", topic: "Fracturas de antebrazo"}, { subject: "TYO", topic: "Fractura de radio distal"} ]},
+                { date: '2025-07-14', topics: [ { subject: "TYO", topic: "Lesiones fisiarias"}, { subject: "TYO", topic: "Fracturas expuestas"}, { subject: "TYO", topic: "Fractura de cadera"}, { subject: "TYO", topic: "Epifisiolistesis femoral"}, { subject: "TYO", topic: "Legg Calvé Perthes"} ]},
+                { date: '2025-07-15', topics: [ { subject: "TYO", topic: "Luxación coxofemoral"}, { subject: "TYO", topic: "Lesiones de rodilla"}, { subject: "TYO", topic: "Fractura de diáfisis de tibia"}, { subject: "TYO", topic: "Esguince de tobillo"}, { subject: "TYO", topic: "Fractura de tobillo"} ]},
+                { date: '2025-07-16', topics: [ { subject: "TYO", topic: "Rotura de talón de Aquiles"}, { subject: "TYO", topic: "Pie equino varo"}, { subject: "TYO", topic: "Pie plano"} ]}
+            ];
             
-            const newSpecialtyOrder = ["TYO"];
-            let flatTopicsList = [];
-            newSpecialtyOrder.forEach(specialty => {
-                const topics = allNewTopicsBySpecialty[specialty];
-                if(topics && topics.length > 0) {
-                    topics.forEach((topic, index) => {
-                        flatTopicsList.push({ topicName: topic, subject: specialty, isFirstOfSubject: index === 0, structureType: 'object' });
-                    });
-                }
-            });
-
             let planDays = new Map();
-            const addTopicsToDay = (dateStr, topics) => {
-                if (!planDays.has(dateStr)) planDays.set(dateStr, { date: dateStr, topicsList: [] });
-                planDays.get(dateStr).topicsList.push(...topics);
-            };
-
-            const tyoTopics = flatTopicsList.filter(t => t.subject === 'TYO');
-            const tyoStartDate = new Date('2025-07-10T00:00:00');
-            const topicsPerDayTYO = Math.ceil(tyoTopics.length / 10);
-            for(let i = 0; i < 10; i++) {
-                const date = new Date(tyoStartDate);
-                date.setDate(date.getDate() + i);
-                const topicsForDay = tyoTopics.slice(i * topicsPerDayTYO, (i + 1) * topicsPerDayTYO);
-                if(topicsForDay.length > 0) addTopicsToDay(date.toISOString().split('T')[0], topicsForDay);
-            }
+            manualPlanPart2.forEach(day => {
+                const topicsList = day.topics.map(t => ({
+                    topicName: t.topic,
+                    subject: t.subject,
+                    isFirstOfSubject: false, // Se recalculará después
+                    structureType: 'object'
+                }));
+                planDays.set(day.date, { date: day.date, topicsList });
+            });
             
             const scheduledDaysPart2 = Array.from(planDays.values());
             
+            // Combinar todo
             let finalPlannedDays = [ ...plannedDaysPart1.reverse(), endoDay, ...oftalmoDays, ...orlDays, ...scheduledDaysPart2 ];
             
             const finalMap = new Map();
